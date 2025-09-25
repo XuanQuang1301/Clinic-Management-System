@@ -4,19 +4,34 @@ Dự án Hệ thống quản lý phòng khám được xây dựng bằng Java S
 
 ⚙️ Chức năng chính
 
-+ Người dùng & Bác sĩ
-- Đăng nhập Admin, kiểm tra tài khoản từ bảng users
-- CRUD bác sĩ, gán khoa & quản lý chuyên khoa
+Người dùng & Bác sĩ
+
+Đăng nhập Admin, kiểm tra tài khoản từ bảng users
+
+CRUD bác sĩ, gán khoa & quản lý chuyên khoa
+
 Bệnh nhân & Khoa
-- CRUD bệnh nhân và hồ sơ
-- CRUD khoa (departments)
+
+CRUD bệnh nhân và hồ sơ
+
+CRUD khoa (departments)
+
 Lịch khám & Phòng khám
-- Đặt lịch khám cho bệnh nhân
-- Quản lý phòng khám (Available/Occupied/Maintenance)
+
+Đặt lịch khám cho bệnh nhân
+
+Quản lý phòng khám (Available/Occupied/Maintenance)
+
 Hồ sơ bệnh án & Thuốc
-- Lưu trữ bệnh án, chẩn đoán, điều trị
-- Quản lý đơn thuốc và gắn với hồ sơ bệnh án
+
+Lưu trữ bệnh án, chẩn đoán, điều trị
+
+Quản lý đơn thuốc và gắn với hồ sơ bệnh án
+
 Hóa đơn & Báo cáo
-- Tạo hóa đơn tự động sau khi khám
-- Quản lý thanh toán (Paid/Unpaid)
-- Dashboard thống kê doanh thu & lịch khám
+
+Tạo hóa đơn tự động sau khi khám
+
+Quản lý thanh toán (Paid/Unpaid)
+
+Dashboard thống kê doanh thu & lịch khám
