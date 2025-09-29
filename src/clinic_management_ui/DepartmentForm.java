@@ -82,6 +82,11 @@ public class DepartmentForm extends javax.swing.JFrame {
 
         txtDepartmentName.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtDepartmentName.setBorder(javax.swing.BorderFactory.createTitledBorder("Department Name"));
+        txtDepartmentName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDepartmentNameActionPerformed(evt);
+            }
+        });
 
         txtDepartmentId.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtDepartmentId.setBorder(javax.swing.BorderFactory.createTitledBorder("ID"));
@@ -132,6 +137,11 @@ public class DepartmentForm extends javax.swing.JFrame {
         jLabel1.setText("Clinic Management");
 
         jButton7.setText("Department");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("Bill");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -263,7 +273,7 @@ public class DepartmentForm extends javax.swing.JFrame {
         int selectedRow = tblDepartments.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một khoa để xóa.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            return; 
+            return;
         } 
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa khoa này không?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
@@ -338,6 +348,14 @@ public class DepartmentForm extends javax.swing.JFrame {
         PatientForm patientForm = new PatientForm();
         patientForm.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtDepartmentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDepartmentNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDepartmentNameActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

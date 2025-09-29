@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatientDAO {
-
+    private Connection conn; 
     // Lấy danh sách tất cả bệnh nhân
     public List<Patient> getAllPatients() {
         List<Patient> list = new ArrayList<>();
@@ -34,7 +34,12 @@ public class PatientDAO {
         }
         return list;
     }
-
+    public PatientDAO(){
+        
+    }
+    public PatientDAO(Connection conn) {
+        this.conn = conn;
+    }
     // Xóa bệnh nhân theo ID
     public boolean deletePatient(int id) {
         String sql = "DELETE FROM patients WHERE patient_id = ?";
