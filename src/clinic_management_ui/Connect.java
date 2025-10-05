@@ -13,13 +13,12 @@ public class Connect {
     public static Connection ConnectDB() {
         try {
 <<<<<<< HEAD
-            // Đảm bảo bạn đã thêm thư viện (JAR file) của MySQL Connector
             Class.forName("com.mysql.cj.jdbc.Driver"); 
             
-            // Chuỗi kết nối của bạn
+          
             String url = "jdbc:mysql://localhost:3310/clinic_management?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
             String user = "root";
-            String password = "dat31505"; // ĐIỀN MẬT KHẨU CỦA BẠN VÀO ĐÂY
+            String password = "dat31505"; 
 
             Connection con = DriverManager.getConnection(url, user, password);
             return con;
