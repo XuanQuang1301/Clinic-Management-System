@@ -3,11 +3,7 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
-<<<<<<< HEAD
             <name>Clinic-Management-System</name>
-=======
-            <name>Clinic Management Systeam</name>
->>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
