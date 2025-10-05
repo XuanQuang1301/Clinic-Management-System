@@ -1,3 +1,5 @@
 "build/" 
 "*.class" 
 "nbproject/private/" 
+/nbproject/private/
+/build/

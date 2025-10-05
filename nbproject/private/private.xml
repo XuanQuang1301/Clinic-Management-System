@@ -3,17 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_ui/AppointmentForm.java</file>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_ui/MedicalRecordForm.java</file>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_dao/MedicalRecordDAO.java</file>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_ui/AddMedicalRecord.java</file>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_dao/PrescriptionDAO.java</file>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_dao/Prescription.java</file>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_dao/MedicalRecordDisplay.java</file>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_dao/MedicalRecord.java</file>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_dao/DiseaseDAO.java</file>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_dao/Disease.java</file>
-            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System/src/clinic_management_dao/Doctor.java</file>
+            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System1/src/clinic_management_ui/AppointmentForm.java</file>
+            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System1/src/clinic_management_ui/Connect.java</file>
+            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System1/src/clinic_management_dao/Department.java</file>
+            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System1/src/clinic_management_dao/DepartmentDAO.java</file>
+            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System1/src/clinic_management_dao/Patient.java</file>
+            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System1/src/clinic_management_dao/PatientDAO.java</file>
+            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System1/src/clinic_management_ui/PatientForm.java</file>
+            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System1/src/clinic_management_ui/AddDepartment.java</file>
+            <file>file:/C:/Users/OS/OneDrive/Documents/NetBeansProjects/Clinic-Management-System1/src/clinic_management_ui/DepartmentForm.java</file>
         </group>
     </open-files>
 </project-private>

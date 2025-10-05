@@ -120,8 +120,4 @@ public class DepartmentDAO {
         }
         return departmentList;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
