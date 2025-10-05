@@ -450,4 +450,8 @@ public class PatientForm extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6

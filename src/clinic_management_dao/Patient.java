@@ -53,4 +53,8 @@ public class Patient {
 
     public String getInsuranceNumber() { return insuranceNumber; }
     public void setInsuranceNumber(String insuranceNumber) { this.insuranceNumber = insuranceNumber; }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6

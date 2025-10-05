@@ -82,11 +82,14 @@ public class DepartmentForm extends javax.swing.JFrame {
 
         txtDepartmentName.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtDepartmentName.setBorder(javax.swing.BorderFactory.createTitledBorder("Department Name"));
+<<<<<<< HEAD
         txtDepartmentName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDepartmentNameActionPerformed(evt);
             }
         });
+=======
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
 
         txtDepartmentId.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtDepartmentId.setBorder(javax.swing.BorderFactory.createTitledBorder("ID"));
@@ -137,11 +140,14 @@ public class DepartmentForm extends javax.swing.JFrame {
         jLabel1.setText("Clinic Management");
 
         jButton7.setText("Department");
+<<<<<<< HEAD
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
             }
         });
+=======
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
 
         jButton8.setText("Bill");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -273,7 +279,11 @@ public class DepartmentForm extends javax.swing.JFrame {
         int selectedRow = tblDepartments.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một khoa để xóa.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+<<<<<<< HEAD
             return;
+=======
+            return; 
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
         } 
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa khoa này không?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
@@ -349,6 +359,7 @@ public class DepartmentForm extends javax.swing.JFrame {
         patientForm.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+<<<<<<< HEAD
     private void txtDepartmentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDepartmentNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDepartmentNameActionPerformed
@@ -357,6 +368,8 @@ public class DepartmentForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
+=======
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -386,4 +399,8 @@ public class DepartmentForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtDepartmentId;
     private javax.swing.JTextField txtDepartmentName;
     // End of variables declaration//GEN-END:variables
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6

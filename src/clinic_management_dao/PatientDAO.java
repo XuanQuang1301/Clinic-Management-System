@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatientDAO {
+<<<<<<< HEAD
     private Connection conn; 
+=======
+
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
     // Lấy danh sách tất cả bệnh nhân
     public List<Patient> getAllPatients() {
         List<Patient> list = new ArrayList<>();
@@ -34,12 +38,16 @@ public class PatientDAO {
         }
         return list;
     }
+<<<<<<< HEAD
     public PatientDAO(){
         
     }
     public PatientDAO(Connection conn) {
         this.conn = conn;
     }
+=======
+
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
     // Xóa bệnh nhân theo ID
     public boolean deletePatient(int id) {
         String sql = "DELETE FROM patients WHERE patient_id = ?";
@@ -159,4 +167,8 @@ public class PatientDAO {
             return false;
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6

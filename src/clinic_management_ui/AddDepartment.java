@@ -53,11 +53,14 @@ public class AddDepartment extends javax.swing.JDialog {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tai - mũi - họng", "Răng - hàm - mặt", "Nhi khoa", "Tiêu hóa", "Ngoại tổng hợp", "Dinh Dưỡng", "Da liễu", "Tim mạch", "Khám bệnh", "Phụ sản" }));
         jComboBox1.setSelectedIndex(-1);
         jComboBox1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+<<<<<<< HEAD
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
             }
         });
+=======
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
 
         txtConsultationFee.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtConsultationFee.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -204,10 +207,13 @@ public class AddDepartment extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+<<<<<<< HEAD
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+=======
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
     public static void main(String args[]) {
 
         /* Create and display the dialog */
@@ -235,4 +241,8 @@ public class AddDepartment extends javax.swing.JDialog {
     private javax.swing.JTextField txtConsultationFee;
     private javax.swing.JTextArea txtDescription;
     // End of variables declaration//GEN-END:variables
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 68af0b23c52c9671770ef9de5519e12c470d72e6
