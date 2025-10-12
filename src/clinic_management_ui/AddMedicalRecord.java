@@ -19,7 +19,7 @@ public class AddMedicalRecord extends JDialog {
 
     // Data
     private final Patient currentPatient;
-    private boolean succeeded = false; // Biến cờ để báo cho cửa sổ cha biết đã thêm thành công
+    private boolean succeeded = false; 
 
     public AddMedicalRecord(Dialog owner, Patient patient) {
         super(owner, "Add New Medical Record", true);
@@ -89,15 +89,15 @@ public class AddMedicalRecord extends JDialog {
 
         if (medicalRecordDAO.addMedicalRecord(record)) {
             JOptionPane.showMessageDialog(this, "Medical record added successfully!");
-            // ---Dùng biến cờ báo hiệu thành công ---
+
             succeeded = true;
-            dispose(); // Đóng cửa sổ
+            dispose(); 
         } else {
             JOptionPane.showMessageDialog(this, "Failed to add medical record. Please check database connection.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // --- Thêm hàm để cửa sổ cha kiểm tra ---
+  
     public boolean isSucceeded() {
         return succeeded;
     }
