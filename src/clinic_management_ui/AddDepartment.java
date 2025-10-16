@@ -53,6 +53,11 @@ public class AddDepartment extends javax.swing.JDialog {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tai - mũi - họng", "Răng - hàm - mặt", "Nhi khoa", "Tiêu hóa", "Ngoại tổng hợp", "Dinh Dưỡng", "Da liễu", "Tim mạch", "Khám bệnh", "Phụ sản" }));
         jComboBox1.setSelectedIndex(-1);
         jComboBox1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         txtConsultationFee.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtConsultationFee.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -198,6 +203,10 @@ public class AddDepartment extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     public static void main(String args[]) {
 

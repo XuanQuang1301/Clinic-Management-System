@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package clinic.management.systeam;
+package clinic.management.system;
 
 /**
  *
- * @author Lenovo
+ * @author dattt
  */
-public class ClinicManagementSysteam {
+public class ClinicManagementSystem {
 
     /**
      * @param args the command line arguments

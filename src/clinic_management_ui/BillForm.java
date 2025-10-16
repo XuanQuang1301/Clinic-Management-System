@@ -177,6 +177,8 @@ public class BillForm extends javax.swing.JFrame {
     }
 
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> new BillForm(null).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            new BillForm(null).setVisible(true);
+        });
     }
 }

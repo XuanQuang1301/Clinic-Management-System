@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleDAO {
+
+    // Trả về list chuỗi để debug / in ra console
     public List<String> getAllSchedulesAsText() {
         List<String> list = new ArrayList<>();
         String sql = "SELECT s.schedule_id, d.full_name, s.schedule_date, r.room_number " +
@@ -31,6 +33,7 @@ public class ScheduleDAO {
         return list;
     }
 
+    // Trả về list object[] để đổ vào JTable
     public List<Object[]> getAllSchedules() {
         List<Object[]> list = new ArrayList<>();
         String sql = "SELECT s.schedule_id, d.full_name, s.schedule_date, r.room_number " +

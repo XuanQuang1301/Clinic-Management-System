@@ -175,4 +175,34 @@ public class AppointmentDAO {
         }
         return list;
     }
+    public List<Appointment> getAppointmentsByPatientId(int patientId) {
+        List<Appointment> list = new ArrayList<>();
+        String sql = "SELECT * FROM appointments WHERE patient_id = ?";
+        
+        try (Connection con = Connect.ConnectDB();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+            
+            pst.setInt(1, patientId);
+            
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Appointment app = new Appointment();
+                    app.setAppointmentId(rs.getInt("appointment_id"));
+                    app.setPatientId(rs.getInt("patient_id"));
+                    app.setDoctorId(rs.getInt("doctor_id"));
+                    // Chú ý: Cột trong DB của bạn có thể là DATETIME hoặc TIMESTAMP
+                    app.setAppointmentDate(rs.getTimestamp("appointment_date")); 
+                    app.setReason(rs.getString("reason"));
+                    app.setStatus(rs.getString("status"));
+                    if (rs.getObject("room_id") != null) {
+                        app.setRoomId(rs.getInt("room_id"));
+                    }
+                    list.add(app);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

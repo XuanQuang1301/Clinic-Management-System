@@ -244,6 +244,7 @@ public class AddAppointment extends javax.swing.JDialog {
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Lỗi lưu lịch hẹn!");
+            JOptionPane.showMessageDialog(this, "Lỗi lưu lịch hẹn: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 

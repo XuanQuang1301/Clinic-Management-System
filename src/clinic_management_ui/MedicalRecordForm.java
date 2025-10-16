@@ -1,0 +1,372 @@
+package clinic_management_ui;
+
+import clinic_management_dao.MedicalRecordDAO;
+import clinic_management_dao.MedicalRecordDisplay;
+import clinic_management_dao.Prescription;
+import clinic_management_dao.PrescriptionDAO;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+
+public class MedicalRecordForm extends JFrame {
+
+    private final MedicalRecordDAO recordDAO = new MedicalRecordDAO();
+    private final PrescriptionDAO prescriptionDAO = new PrescriptionDAO();
+    private Integer currentlyEditingPrescriptionId = null;
+
+    private JTextField txtPatientName, txtDoctorName;
+    private JButton btnSearch, btnDeleteRecord, btnEditRecord;
+    private JTable tblRecords;
+    private DefaultTableModel recordTableModel;
+    private JPanel prescriptionPanel;
+    private JTable tblPrescriptions;
+    private DefaultTableModel prescriptionTableModel;
+    private JTextField txtMedicineName, txtDosage, txtQuantity;
+    private JTextArea txtInstructions;
+    // === Đổi tên các nút ===
+    private JButton btnAddOrUpdate, btnNew, btnDeletePrescription;
+    private JPanel navPanel;
+
+    public MedicalRecordForm() {
+        super("Clinic Management - Medical Records");
+        initComponents();
+        loadAllRecords();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1280, 720);
+        setLocationRelativeTo(null);
+    }
+
+    private void initComponents() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        createNavigationPanel();
+        mainPanel.add(navPanel, BorderLayout.WEST);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, createMedicalRecordPanel(), createPrescriptionPanel());
+        splitPane.setResizeWeight(0.55);
+        mainPanel.add(splitPane, BorderLayout.CENTER);
+        JPanel bottomButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        JButton btnSaveWindow = new JButton("Save & Close");
+        JButton btnCancelWindow = new JButton("Cancel");
+        btnSaveWindow.setFont(new Font("Tahoma", Font.BOLD, 14));
+        btnCancelWindow.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        bottomButtonPanel.add(btnSaveWindow);
+        bottomButtonPanel.add(btnCancelWindow);
+        mainPanel.add(bottomButtonPanel, BorderLayout.SOUTH);
+        btnSaveWindow.addActionListener(e -> backToMainPage());
+        btnCancelWindow.addActionListener(e -> backToMainPage());
+        this.setContentPane(mainPanel);
+    }
+    
+    private void backToMainPage() { new AppointmentForm().setVisible(true); this.dispose(); }
+
+    private JPanel createMedicalRecordPanel() {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createTitledBorder("Medical Records Management"));
+        JPanel searchPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+        JPanel fieldsPanel = new JPanel(new FlowLayout());
+        txtPatientName = new JTextField(15);
+        txtPatientName.setBorder(BorderFactory.createTitledBorder("Patient Name"));
+        txtDoctorName = new JTextField(15);
+        txtDoctorName.setBorder(BorderFactory.createTitledBorder("Doctor Name"));
+        fieldsPanel.add(txtPatientName);
+        fieldsPanel.add(txtDoctorName);
+        JPanel buttonsPanel = new JPanel(new FlowLayout());
+        btnSearch = new JButton("Search");
+        btnEditRecord = new JButton("Edit Selected Record");
+        btnDeleteRecord = new JButton("Delete Selected Record");
+        buttonsPanel.add(btnSearch);
+        buttonsPanel.add(btnEditRecord);
+        buttonsPanel.add(btnDeleteRecord);
+        searchPanel.add(fieldsPanel);
+        searchPanel.add(buttonsPanel);
+        panel.add(searchPanel, BorderLayout.NORTH);
+        recordTableModel = new DefaultTableModel(new String[]{"ID", "Patient", "Doctor", "Date", "Diagnosis"}, 0) {
+            @Override public boolean isCellEditable(int r, int c) { return false; }
+        };
+        tblRecords = new JTable(recordTableModel);
+        tblRecords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        panel.add(new JScrollPane(tblRecords), BorderLayout.CENTER);
+        tblRecords.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) updatePrescriptionView();
+        });
+        btnSearch.addActionListener(evt -> searchRecords());
+        btnEditRecord.addActionListener(evt -> editSelectedRecord());
+        btnDeleteRecord.addActionListener(evt -> deleteSelectedRecord());
+        return panel;
+    }
+
+    /**
+     * === Cập nhật lại các nút trong panel đơn thuốc ===
+     */
+    private JPanel createPrescriptionPanel() {
+        prescriptionPanel = new JPanel(new BorderLayout(10, 10));
+        prescriptionPanel.setBorder(BorderFactory.createTitledBorder("Prescriptions for Selected Record"));
+        JPanel formPanel = new JPanel(new GridLayout(0, 2, 5, 5));
+        formPanel.add(new JLabel("Medicine Name:"));
+        txtMedicineName = new JTextField();
+        formPanel.add(txtMedicineName);
+        formPanel.add(new JLabel("Dosage:"));
+        txtDosage = new JTextField();
+        formPanel.add(txtDosage);
+        formPanel.add(new JLabel("Quantity:"));
+        txtQuantity = new JTextField();
+        formPanel.add(txtQuantity);
+        formPanel.add(new JLabel("Instructions:"));
+        txtInstructions = new JTextArea(3, 20);
+        formPanel.add(new JScrollPane(txtInstructions));
+        JPanel formContainer = new JPanel(new BorderLayout());
+        formContainer.add(formPanel, BorderLayout.CENTER);
+        
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        btnAddOrUpdate = new JButton("Add / Update"); // Nút chính, vừa thêm vừa sửa
+        btnNew = new JButton("New"); // Nút để xóa trắng form, chuẩn bị thêm mới
+        btnDeletePrescription = new JButton("Delete");
+        
+        buttonPanel.add(btnAddOrUpdate);
+        buttonPanel.add(btnNew);
+        buttonPanel.add(btnDeletePrescription);
+        
+        formContainer.add(buttonPanel, BorderLayout.SOUTH);
+        prescriptionPanel.add(formContainer, BorderLayout.NORTH);
+        
+        prescriptionTableModel = new DefaultTableModel(new String[]{"ID", "Medicine", "Dosage", "Qty"}, 0) {
+             @Override public boolean isCellEditable(int r, int c) { return false; }
+        };
+        tblPrescriptions = new JTable(prescriptionTableModel);
+        prescriptionPanel.add(new JScrollPane(tblPrescriptions), BorderLayout.CENTER);
+        
+        tblPrescriptions.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = tblPrescriptions.getSelectedRow();
+                if (selectedRow != -1) {
+                    currentlyEditingPrescriptionId = (Integer) tblPrescriptions.getValueAt(selectedRow, 0);
+                    txtMedicineName.setText((String) tblPrescriptions.getValueAt(selectedRow, 1));
+                    txtDosage.setText((String) tblPrescriptions.getValueAt(selectedRow, 2));
+                    txtQuantity.setText(String.valueOf(tblPrescriptions.getValueAt(selectedRow, 3)));
+                    Prescription p = prescriptionDAO.getPrescriptionById(currentlyEditingPrescriptionId);
+                    if (p != null) txtInstructions.setText(p.getInstructions());
+                }
+            }
+        });
+        
+        btnAddOrUpdate.addActionListener(evt -> addOrUpdatePrescription());
+        btnNew.addActionListener(evt -> clearPrescriptionForm());
+        btnDeletePrescription.addActionListener(evt -> deleteSelectedPrescription());
+        
+        setPrescriptionPanelEnabled(false);
+        return prescriptionPanel;
+    }
+    
+    /**
+     * ===Đổi tên hàm thành addOrUpdatePrescription===
+     */
+    private void addOrUpdatePrescription() {
+        int selectedRecordRow = tblRecords.getSelectedRow();
+        if (selectedRecordRow == -1) { JOptionPane.showMessageDialog(this, "Please select a medical record first.", "Warning", JOptionPane.WARNING_MESSAGE); return; }
+        int recordId = (int) tblRecords.getValueAt(selectedRecordRow, 0);
+        String medicineName = txtMedicineName.getText().trim();
+        String dosage = txtDosage.getText().trim();
+        String instructions = txtInstructions.getText().trim();
+        String quantityStr = txtQuantity.getText().trim();
+        if (medicineName.isEmpty() || dosage.isEmpty() || quantityStr.isEmpty()) { JOptionPane.showMessageDialog(this, "Medicine Name, Dosage, and Quantity are required.", "Validation Error", JOptionPane.WARNING_MESSAGE); return; }
+        int quantity;
+        try { quantity = Integer.parseInt(quantityStr); } catch (NumberFormatException e) { JOptionPane.showMessageDialog(this, "Quantity must be a valid number.", "Validation Error", JOptionPane.ERROR_MESSAGE); return; }
+        Prescription p = new Prescription();
+        p.setRecordId(recordId);
+        p.setMedicineName(medicineName);
+        p.setDosage(dosage);
+        p.setQuantity(quantity);
+        p.setInstructions(instructions);
+        
+        boolean success;
+        String action;
+        if (currentlyEditingPrescriptionId == null) {
+            // THÊM MỚI
+            success = prescriptionDAO.addPrescription(p);
+            action = "added";
+        } else {
+            // CẬP NHẬT
+            p.setPrescriptionId(currentlyEditingPrescriptionId);
+            success = prescriptionDAO.updatePrescription(p);
+            action = "updated";
+        }
+        
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Prescription " + action + " successfully.");
+            loadPrescriptionsForRecord(recordId);
+            clearPrescriptionForm();
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to save prescription.", "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void clearPrescriptionForm() {
+        txtMedicineName.setText("");
+        txtDosage.setText("");
+        txtQuantity.setText("");
+        txtInstructions.setText("");
+        currentlyEditingPrescriptionId = null;
+        tblPrescriptions.clearSelection();
+    }
+    
+  
+    
+    private void createNavigationPanel() {
+        navPanel = new JPanel();
+        navPanel.setBackground(new Color(255, 204, 204));
+        navPanel.setLayout(new GridLayout(10, 1, 10, 15));
+        navPanel.setBorder(BorderFactory.createEmptyBorder(20, 15, 20, 15));
+        JLabel title = new JLabel("Clinic Management");
+        title.setFont(new Font("Tahoma", Font.BOLD, 20));
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        navPanel.add(title);
+        JButton btnPatient = new JButton("Patient");
+        JButton btnDoctor = new JButton("Doctor");
+        JButton btnDepartment = new JButton("Department");
+        JButton btnAppointment = new JButton("Appointment");
+        JButton btnMedicalRecord = new JButton("Medical Record");
+        JButton btnBill = new JButton("Bill");
+        JButton btnLogin = new JButton("Login");
+        btnPatient.addActionListener(e -> { new PatientForm().setVisible(true); this.dispose(); });
+        btnAppointment.addActionListener(e -> { new AppointmentForm().setVisible(true); this.dispose(); });
+        JButton[] navButtons = {btnPatient, btnDoctor, btnDepartment, btnAppointment, btnMedicalRecord, btnBill, btnLogin};
+        for (JButton btn : navButtons) {
+            btn.setFocusPainted(false);
+            navPanel.add(btn);
+        }
+        btnMedicalRecord.setBackground(Color.WHITE);
+    }
+
+    private void editSelectedRecord() {
+        int selectedRow = tblRecords.getSelectedRow();
+        if (selectedRow == -1) { JOptionPane.showMessageDialog(this, "Please select a record to edit.", "Warning", JOptionPane.WARNING_MESSAGE); return; }
+        int recordId = (int) tblRecords.getValueAt(selectedRow, 0);
+        String currentDiagnosis = (String) tblRecords.getValueAt(selectedRow, 4);
+        String newDiagnosis = JOptionPane.showInputDialog(this, "Enter new diagnosis:", currentDiagnosis);
+        if (newDiagnosis != null && !newDiagnosis.trim().isEmpty() && !newDiagnosis.equals(currentDiagnosis)) {
+            if (recordDAO.updateMedicalRecordDiagnosis(recordId, newDiagnosis.trim())) {
+                JOptionPane.showMessageDialog(this, "Diagnosis updated successfully.");
+                loadAllRecords();
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to update diagnosis.", "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private void loadAllRecords() {
+        List<MedicalRecordDisplay> list = recordDAO.getAllRecordsWithDetails();
+        recordTableModel.setRowCount(0);
+        if (list != null) {
+            for (MedicalRecordDisplay record : list) {
+                recordTableModel.addRow(new Object[]{
+                    record.getRecordId(), record.getPatientName(), record.getDoctorName(),
+                    record.getAppointmentDate(), record.getDiagnosis()
+                });
+            }
+        }
+    }
+
+    private void searchRecords() {
+        String patientName = txtPatientName.getText().trim();
+        String doctorName = txtDoctorName.getText().trim();
+        List<MedicalRecordDisplay> list = recordDAO.searchRecords(patientName, doctorName);
+        recordTableModel.setRowCount(0);
+        if (list != null) {
+            for (MedicalRecordDisplay record : list) {
+                recordTableModel.addRow(new Object[]{
+                    record.getRecordId(), record.getPatientName(), record.getDoctorName(),
+                    record.getAppointmentDate(), record.getDiagnosis()
+                });
+            }
+        }
+    }
+
+    private void deleteSelectedRecord() {
+        int selectedRow = tblRecords.getSelectedRow();
+        if (selectedRow == -1) { JOptionPane.showMessageDialog(this, "Please select a record to delete.", "Warning", JOptionPane.WARNING_MESSAGE); return; }
+        int recordId = (int) tblRecords.getValueAt(selectedRow, 0);
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete record ID: " + recordId + "?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (recordDAO.deleteMedicalRecord(recordId)) {
+                JOptionPane.showMessageDialog(this, "Record deleted successfully.");
+                loadAllRecords();
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to delete record.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void updatePrescriptionView() {
+        int selectedRow = tblRecords.getSelectedRow();
+        if (selectedRow != -1) {
+            setPrescriptionPanelEnabled(true);
+            int recordId = (int) tblRecords.getValueAt(selectedRow, 0);
+            loadPrescriptionsForRecord(recordId);
+        } else {
+            setPrescriptionPanelEnabled(false);
+            prescriptionTableModel.setRowCount(0);
+        }
+        clearPrescriptionForm();
+    }
+
+    private void loadPrescriptionsForRecord(int recordId) {
+        List<Prescription> list = prescriptionDAO.getPrescriptionsByRecordId(recordId);
+        prescriptionTableModel.setRowCount(0);
+        if (list != null) {
+            for (Prescription p : list) {
+                prescriptionTableModel.addRow(new Object[]{p.getPrescriptionId(), p.getMedicineName(), p.getDosage(), p.getQuantity()});
+            }
+        }
+    }
+    
+    private void deleteSelectedPrescription() {
+        int selectedPrescriptionRow = tblPrescriptions.getSelectedRow();
+        if (selectedPrescriptionRow == -1) { JOptionPane.showMessageDialog(this, "Please select a prescription to delete.", "Warning", JOptionPane.WARNING_MESSAGE); return; }
+        int prescriptionId = (int) tblPrescriptions.getValueAt(selectedPrescriptionRow, 0);
+        int confirm = JOptionPane.showConfirmDialog(this, "Delete this medicine from the prescription?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (prescriptionDAO.deletePrescription(prescriptionId)) {
+                JOptionPane.showMessageDialog(this, "Prescription deleted successfully.");
+                updatePrescriptionView();
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to delete prescription.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void setPrescriptionPanelEnabled(boolean enabled) {
+        for (Component component : prescriptionPanel.getComponents()) {
+            if (component instanceof JPanel) {
+                for (Component subComponent : ((JPanel) component).getComponents()) {
+                    subComponent.setEnabled(enabled);
+                    if (subComponent instanceof JScrollPane) {
+                         ((JScrollPane) subComponent).getViewport().getView().setEnabled(enabled);
+                    }
+                }
+            }
+            component.setEnabled(enabled);
+        }
+        tblPrescriptions.setEnabled(enabled);
+    }
+}
