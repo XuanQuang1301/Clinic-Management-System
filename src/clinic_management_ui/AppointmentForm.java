@@ -44,7 +44,7 @@ public class AppointmentForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAppointments = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();   
+        jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
@@ -96,6 +96,11 @@ public class AppointmentForm extends javax.swing.JFrame {
         });
 
         jButton3.setText("Doctor");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Appointment");
 
@@ -105,12 +110,18 @@ public class AppointmentForm extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
+
         jButton6.setText("Login");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
         jLabel1.setText("Clinic Management");
 
         jButton7.setText("Department");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("Bill");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -318,36 +329,10 @@ public class AppointmentForm extends javax.swing.JFrame {
         PatientForm patientForm = new PatientForm();
         patientForm.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-    try {
-        
-        System.out.println("Nút Medical Record đã được nhấn. Đang khởi tạo MedicalRecordForm...");
-
-       
-        MedicalRecordForm medicalForm = new MedicalRecordForm();
-        
-     
-        medicalForm.setVisible(true);
-        
-        
-        this.dispose(); 
-
-        } catch (Exception e) {
- 
-        
-            JOptionPane.showMessageDialog(
-                this, 
-                "Không thể mở màn hình Medical Record. Đã có lỗi xảy ra:\n\n" + e.getMessage(), 
-                "Lỗi Khởi Tạo", 
-             JOptionPane.ERROR_MESSAGE
-            );
-        
-            
-            e.printStackTrace();
-        }
-    }  
+  
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
+        BillForm billForm = new BillForm(); 
+        billForm.setVisible(true);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void btnDeleteAppointmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteAppointmentActionPerformed
@@ -414,6 +399,21 @@ public class AppointmentForm extends javax.swing.JFrame {
         ScheduleForm scheduleForm = new ScheduleForm(conn);
         scheduleForm.setVisible(true);
     }//GEN-LAST:event_btnCheckShedulesActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        DepartmentForm departmentForm = new DepartmentForm();
+        departmentForm.setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        MedicalRecordForm medicalForm = new MedicalRecordForm();
+        medicalForm.setVisible(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

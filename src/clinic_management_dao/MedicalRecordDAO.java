@@ -69,7 +69,7 @@ public class MedicalRecordDAO {
 
     public List<MedicalRecordDisplay> getAllRecordsWithDetails() {
         List<MedicalRecordDisplay> list = new ArrayList<>();
-        String sql = "SELECT mr.record_id, p.patient_name, d.doctor_name, a.appointment_date, mr.diagnosis " +
+        String sql = "SELECT mr.record_id, p.full_name, d.full_name, a.appointment_date, mr.diagnosis " +
                      "FROM medical_records mr " +
                      "JOIN appointments a ON mr.appointment_id = a.appointment_id " +
                      "JOIN patients p ON a.patient_id = p.patient_id " +

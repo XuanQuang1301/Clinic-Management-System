@@ -15,6 +15,7 @@ public class PatientForm extends javax.swing.JFrame {
     public PatientForm() {
         initComponents();
         Get_Data(); // load data khi khởi động
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")
@@ -154,6 +155,11 @@ public class PatientForm extends javax.swing.JFrame {
         jButton6.setText("Doctor");
 
         jButton7.setText("Appointment");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("Medical Record");
 
@@ -417,9 +423,14 @@ public class PatientForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        DepartmentForm departmentForm = new DepartmentForm(this);
+        DepartmentForm departmentForm = new DepartmentForm();
         departmentForm.setVisible(true);
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        AppointmentForm appointmentForm = new AppointmentForm();
+        appointmentForm.setVisible(true);       // TODO add your handling code here:
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     public static void main(String args[]) {
         /* Create and display the form */

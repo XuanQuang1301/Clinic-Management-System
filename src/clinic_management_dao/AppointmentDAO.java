@@ -16,7 +16,7 @@ public class AppointmentDAO {
     // Lấy tất cả lịch khám kèm tên bệnh nhân, tên bác sĩ và số phòng
     public List<AppointmentDisplay> getAllWithNames() {
         List<AppointmentDisplay> list = new ArrayList<>();
-        String sql = "SELECT a.appointment_id, p.patient_name, d.doctor_name, a.appointment_date, " +
+        String sql = "SELECT a.appointment_id, p.full_name, d.full_name, a.appointment_date, " +
                      "a.reason, a.status, r.room_number " +
                      "FROM appointments a " +
                      "JOIN patients p ON a.patient_id = p.patient_id " +

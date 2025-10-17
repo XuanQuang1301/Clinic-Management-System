@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class DepartmentForm extends javax.swing.JFrame {
         
-    public DepartmentForm(JFrame parent) {
+    public DepartmentForm() {
         initComponents();
         Get_Data();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
@@ -128,8 +128,18 @@ public class DepartmentForm extends javax.swing.JFrame {
         jButton3.setText("Doctor");
 
         jButton4.setText("Appointment");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Medical Record");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Login");
 
@@ -354,13 +364,24 @@ public class DepartmentForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtDepartmentNameActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        DepartmentForm departmentForm = new DepartmentForm();
+        departmentForm.setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        AppointmentForm appointmentForm = new AppointmentForm(); 
+        appointmentForm.setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DepartmentForm(null).setVisible(true); 
+                new DepartmentForm().setVisible(true); 
             }
         });
     }

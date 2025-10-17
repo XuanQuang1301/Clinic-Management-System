@@ -19,7 +19,7 @@ public class BillForm extends javax.swing.JFrame {
     private javax.swing.JButton btnDeleteBill;
     private javax.swing.JButton btnDashboard;
 
-    public BillForm(JFrame parent) {
+    public BillForm() {
         initComponents();
         Get_Data();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -178,7 +178,7 @@ public class BillForm extends javax.swing.JFrame {
 
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {
-            new BillForm(null).setVisible(true);
+            new BillForm().setVisible(true);
         });
     }
 }
