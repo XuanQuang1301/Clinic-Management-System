@@ -369,4 +369,10 @@ public class MedicalRecordForm extends JFrame {
         }
         tblPrescriptions.setEnabled(enabled);
     }
+    public static void main(String[] args) {
+        java.awt.EventQueue.invokeLater(() -> {
+            new MedicalRecordForm().setVisible(true);
+        });
+    }
+
 }
