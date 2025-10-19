@@ -7,13 +7,12 @@ public class Patient {
     private String phoneNumber;
     private String dateOfBirth;
     private String address;
-    private String bloodGroup;
+    private BloodGroup bloodGroup;
     private String email;
     private String insuranceNumber;
 
-    // Constructor
     public Patient(int id, String fullName, String gender, String phoneNumber,
-                   String dateOfBirth, String address, String bloodGroup,
+                   String dateOfBirth, String address, BloodGroup bloodGroup,
                    String email, String insuranceNumber) {
         this.id = id;
         this.fullName = fullName;
@@ -45,8 +44,8 @@ public class Patient {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
-    public String getBloodGroup() { return bloodGroup; }
-    public void setBloodGroup(String bloodGroup) { this.bloodGroup = bloodGroup; }
+    public BloodGroup getBloodGroup() { return bloodGroup; }
+    public void setBloodGroup(BloodGroup bloodGroup) { this.bloodGroup = bloodGroup; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }

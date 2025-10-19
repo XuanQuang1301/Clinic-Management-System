@@ -6,12 +6,14 @@ import clinic_management_dao.DepartmentDAO;
 import clinic_management_dao.Department;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
+import javax.swing.JFrame;
 
 public class AddDepartment extends javax.swing.JDialog {
     
     public AddDepartment(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
     }
 
 

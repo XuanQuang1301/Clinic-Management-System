@@ -5,7 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import clinic_management_dao.PatientDAO;
 import clinic_management_dao.Patient;
-
+import clinic_management_dao.BloodGroup; 
 
 
 public class PatientForm extends javax.swing.JFrame {
@@ -262,8 +262,8 @@ public class PatientForm extends javax.swing.JFrame {
                         .addComponent(jButton4))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(288, 288, 288))))
+                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(272, 272, 272))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -361,7 +361,7 @@ public class PatientForm extends javax.swing.JFrame {
                 jTable1.getValueAt(row, 3).toString(),
                 jTable1.getValueAt(row, 4).toString(),
                 jTable1.getValueAt(row, 5).toString(),
-                jTable1.getValueAt(row, 6).toString(),
+                BloodGroup.valueOf(jTable1.getValueAt(row, 6).toString()),
                 jTable1.getValueAt(row, 7).toString(),
                 jTable1.getValueAt(row, 8).toString()
         );

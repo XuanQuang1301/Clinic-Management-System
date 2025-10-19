@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentDAO {
+    public DepartmentDAO(){
+        
+    }
     public boolean add(Department department) {
         String sql = "INSERT INTO departments (department_name, description, consultation_fee) VALUES (?, ?, ?)";
         try (Connection conn = Connect.ConnectDB(); 
@@ -120,4 +123,56 @@ public class DepartmentDAO {
         }
         return departmentList;
     }
+    public Department getDepartmentById(int departmentId) {
+        String sql = "SELECT department_id, department_name, description, consultation_fee FROM departments WHERE department_id = ?";
+        Department department = null;
+
+        try (Connection conn = Connect.ConnectDB();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, departmentId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    department = new Department();
+                    department.setDepartmentId(rs.getInt("department_id"));
+                    department.setDepartmentName(rs.getString("department_name"));
+                    department.setDescription(rs.getString("description"));
+                    department.setConsultationFee(rs.getBigDecimal("consultation_fee"));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return department;
+    }
+    public List<Department> searchByName(String name) {
+        List<Department> departmentList = new ArrayList<>();
+        String sql = "SELECT department_id, department_name, description, consultation_fee FROM departments WHERE department_name LIKE ?";
+
+        try (Connection conn = Connect.ConnectDB();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + name + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Department department = new Department();
+                    department.setDepartmentId(rs.getInt("department_id"));
+                    department.setDepartmentName(rs.getString("department_name"));
+                    department.setDescription(rs.getString("description"));
+                    department.setConsultationFee(rs.getBigDecimal("consultation_fee"));
+                    departmentList.add(department);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return departmentList;
+    }
+
 }

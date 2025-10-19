@@ -9,6 +9,7 @@ import clinic_management_dao.Doctor;
 import clinic_management_dao.Room;
 import java.util.*; 
 import java.sql.*; 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class AddAppointment extends javax.swing.JDialog {
@@ -18,6 +19,7 @@ public class AddAppointment extends javax.swing.JDialog {
     public AddAppointment(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
     }
     public AddAppointment(Connection conn) {
         this.conn = conn; 

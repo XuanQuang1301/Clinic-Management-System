@@ -16,6 +16,7 @@ public class AddRoom extends javax.swing.JDialog {
         loadStatus();
         setLocationRelativeTo(null); 
         addEventHandlers();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
     }
     private void loadDepartments() {
         try {

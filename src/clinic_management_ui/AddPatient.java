@@ -4,6 +4,7 @@ import clinic_management_dao.PatientDAO;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
@@ -11,6 +12,7 @@ public class AddPatient extends javax.swing.JFrame {
     
     public AddPatient() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
     }
     
     private void Reset() {

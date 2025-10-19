@@ -16,7 +16,7 @@ public class DashboardForm extends JFrame {
         setTitle("Dashboard Báo Cáo");
         setSize(520, 350);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 1, 20, 20));
@@ -42,6 +42,7 @@ public class DashboardForm extends JFrame {
 
         // Load số liệu thực tế từ DAO/model
         loadStatistics();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     private void loadStatistics() {

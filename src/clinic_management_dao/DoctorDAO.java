@@ -1,146 +1,192 @@
+
 package clinic_management_dao;
-import clinic_management_ui.Connect;
-import java.sql.*;
+import clinic_management_dao.Doctor;
+import clinic_management_dao.Gender;
+import clinic_management_ui.Connect; 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 
+/**
+ *
+ * @author nguye
+ */
 public class DoctorDAO {
-
-    private Connection conn;
-
-    // Constructor có thể nhận Connection từ ngoài
-    public DoctorDAO(Connection conn) {
-        this.conn = conn;
+    private Connection conn; 
+    public DoctorDAO(Connection conn){
+        this.conn = conn; 
     }
-
-    // Nếu không truyền thì tự mở kết nối
-    public DoctorDAO() {
-        this.conn = Connect.ConnectDB();
+    public DoctorDAO(){
+        
     }
+    public static List<Doctor> getAllDoctors() {
+        List<Doctor> doctorList = new ArrayList<>();
+        String sql = "SELECT doctor_id, full_name, email, gender, specialization, department_id, phone_number, date_of_birth FROM doctors";
 
-    // Lấy tất cả bác sĩ
-    public List<Doctor> getAllDoctors() {
-        List<Doctor> list = new ArrayList<>();
-        String sql = "SELECT * FROM doctors ORDER BY doctor_id";
-
-        try (PreparedStatement pst = conn.prepareStatement(sql);
-             ResultSet rs = pst.executeQuery()) {
-
+        try (Connection conn = Connect.ConnectDB(); 
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                Doctor d = new Doctor(
-                        rs.getInt("doctor_id"),
-                        rs.getString("full_name"),
-                        rs.getString("gender"),
-                        rs.getString("date_of_birth"), // có thể đổi sang rs.getDate nếu muốn
-                        rs.getString("email"),
-                        rs.getString("phone_number"),
-                        rs.getString("specialization"),
-                        rs.getInt("department_id")
-                );
-                list.add(d);
+                Doctor doctor = new Doctor();
+                doctor.setDoctorId(rs.getInt("doctor_id"));
+                doctor.setFullName(rs.getString("full_name"));
+                doctor.setEmail(rs.getString("email"));
+                doctor.setSpecialization(rs.getString("specialization"));
+                doctor.setDepartmentId(rs.getInt("department_id"));
+                doctor.setPhoneNumber(rs.getString("phone_number"));
+                if (rs.getString("gender") != null) {
+                    doctor.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
+                }
+                java.sql.Date dobSql = rs.getDate("date_of_birth");  
+                if (dobSql != null) {
+                doctor.setDateOfBirth(dobSql.toLocalDate());  
+                }
+                doctorList.add(doctor);
             }
         } catch (SQLException e) {
-            System.err.println("Error getAllDoctors: " + e.getMessage());
+            e.printStackTrace(); 
         }
-        return list;
+        return doctorList;
     }
+    public boolean deleteDoctor(int doctorId) throws SQLException
+    {
+        String sql = "DELETE FROM doctors WHERE doctor_id = ?";
+        try(Connection conn = Connect.ConnectDB(); PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setInt(1, doctorId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected >0;
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean add(Doctor doctor) throws SQLException
+    {
+        String sql = "INSERT INTO doctors (full_name, date_of_birth, gender, email, phone_number,department_id, specialization) VALUE(?, ?, ?, ?, ?, ?,?)";
+        try (Connection conn = Connect.ConnectDB(); 
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-    // Thêm bác sĩ
-    public boolean insertDoctor(Doctor d) {
-        String sql = "INSERT INTO doctors (full_name, gender, date_of_birth, email, phone_number, specialization, department_id) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setString(1, d.getFullName());
-            pst.setString(2, d.getGender());
-            pst.setString(3, d.getDateOfBirth());
-            pst.setString(4, d.getEmail());
-            pst.setString(5, d.getPhoneNumber());
-            pst.setString(6, d.getSpecialization());
-            pst.setInt(7, d.getDepartmentId());
-
-            return pst.executeUpdate() > 0;
+            ps.setString(1, doctor.getFullName());
+            ps.setDate(2, java.sql.Date.valueOf(doctor.getDateOfBirth()));
+            ps.setString(3, doctor.getGender().name());  
+            ps.setString(4, doctor.getEmail());
+            ps.setString(5, doctor.getPhoneNumber());
+            ps.setInt(6, doctor.getDepartmentId());
+            ps.setString(7, doctor.getSpecialization());
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
-            System.err.println("Error insertDoctor: " + e.getMessage());
-        }
-        return false;
+            e.printStackTrace();
+            return false;
+        }      
     }
-
-    // Cập nhật bác sĩ
-    public boolean updateDoctor(Doctor d) {
-        String sql = "UPDATE doctors SET full_name=?, gender=?, date_of_birth=?, email=?, phone_number=?, specialization=?, department_id=? "
-                   + "WHERE doctor_id=?";
-
-        try (PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setString(1, d.getFullName());
-            pst.setString(2, d.getGender());
-            pst.setString(3, d.getDateOfBirth());
-            pst.setString(4, d.getEmail());
-            pst.setString(5, d.getPhoneNumber());
-            pst.setString(6, d.getSpecialization());
-            pst.setInt(7, d.getDepartmentId());
-            pst.setInt(8, d.getDoctorId());
-
-            return pst.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.err.println("Error updateDoctor: " + e.getMessage());
+    public List<Doctor> searchDoctor(String searchTerm, String searchBy) {
+        List<Doctor> doctorList = new ArrayList<>();
+        String sql = "SELECT d.*, dp.department_name FROM doctors d JOIN departments dp ON d.department_id = dp.department_id WHERE ";
+        switch(searchBy)
+        {
+            case "Tên bác sĩ":
+                sql+= " d.full_name LIKE ?";
+                break;
+            case "Khoa":
+                sql+=" dp.department_name LIKE ?";
+                break;
+            default:
+                return doctorList;
         }
-        return false;
-    }
+        try (Connection conn = Connect.ConnectDB(); 
+        PreparedStatement ps = conn.prepareStatement(sql)) {
 
-    // Xóa bác sĩ theo ID
-    public boolean deleteDoctor(int id) {
-        String sql = "DELETE FROM doctors WHERE doctor_id=?";
-        try (PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setInt(1, id);
-            return pst.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.err.println("Error deleteDoctor: " + e.getMessage());
-        }
-        return false;
-    }
-
-    // Tìm kiếm bác sĩ theo tên, chuyên khoa hoặc email
-    public List<Doctor> searchDoctor(String name, String specialization, String email) {
-        List<Doctor> list = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM doctors WHERE 1=1");
-        List<Object> params = new ArrayList<>();
-
-        if (name != null && !name.isEmpty()) {
-            sql.append(" AND full_name LIKE ?");
-            params.add("%" + name + "%");
-        }
-        if (specialization != null && !specialization.isEmpty()) {
-            sql.append(" AND specialization LIKE ?");
-            params.add("%" + specialization + "%");
-        }
-        if (email != null && !email.isEmpty()) {
-            sql.append(" AND email LIKE ?");
-            params.add("%" + email + "%");
-        }
-
-        try (PreparedStatement pst = conn.prepareStatement(sql.toString())) {
-            for (int i = 0; i < params.size(); i++) {
-                pst.setObject(i + 1, params.get(i));
-            }
-
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                Doctor d = new Doctor(
-                        rs.getInt("doctor_id"),
-                        rs.getString("full_name"),
-                        rs.getString("gender"),
-                        rs.getString("date_of_birth"),
-                        rs.getString("email"),
-                        rs.getString("phone_number"),
-                        rs.getString("specialization"),
-                        rs.getInt("department_id")
-                );
-                list.add(d);
+            ps.setString(1, "%" + searchTerm+ "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Doctor doctor = new Doctor();
+                    doctor.setDoctorId(rs.getInt("doctor_id"));
+                    doctor.setFullName(rs.getString("full_name"));
+                    doctor.setEmail(rs.getString("email"));
+                    if (rs.getString("gender") != null) {
+                        doctor.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
+                    }
+                    java.sql.Date dobSql = rs.getDate("date_of_birth");
+                    if (dobSql != null) {
+                        doctor.setDateOfBirth(dobSql.toLocalDate());
+                    }
+                    doctor.setPhoneNumber(rs.getString("phone_number"));
+                    doctor.setSpecialization(rs.getString("specialization"));
+                    doctor.setDepartmentId(rs.getInt("department_id"));
+                    doctorList.add(doctor);
+                }
             }
         } catch (SQLException e) {
-            System.err.println("Error searchDoctor: " + e.getMessage());
+            e.printStackTrace();
         }
-        return list;
+        return doctorList;
     }
+    public Doctor getDoctorById(int doctorId) throws SQLException
+    {
+        String sql = "SELECT * FROM doctors WHERE doctor_id = ?";
+        try(Connection conn = Connect.ConnectDB();  PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setInt(1, doctorId);
+            try(ResultSet rs = ps.executeQuery())
+            {
+                if(rs.next())
+                {
+                    Doctor doctor = new Doctor();
+                    doctor.setDoctorId(rs.getInt("doctor_id"));
+                    doctor.setFullName(rs.getString("full_name"));
+                    doctor.setEmail(rs.getString("email"));
+                    doctor.setSpecialization(rs.getString("specialization"));
+                    doctor.setDepartmentId(rs.getInt("department_id"));
+                    doctor.setPhoneNumber(rs.getString("phone_number"));
+                    if (rs.getString("gender") != null) {
+                        doctor.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
+                    }
+                    java.sql.Date dobSql = rs.getDate("date_of_birth");
+                    if(dobSql != null)
+                    {
+                        doctor.setDateOfBirth(dobSql.toLocalDate());
+                    }
+                    return doctor;
+                }
+            }
+            
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;  
+    }
+    public boolean updateDoctor(Doctor doctor) throws SQLException
+    {
+        String sql = "UPDATE doctors SET full_name =?, date_of_birth=?, gender=?, email = ?, phone_number = ?, department_id = ?, specialization = ? WHERE doctor_id = ?";
+        try(Connection conn = Connect.ConnectDB();  PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setString(1, doctor.getFullName());
+            ps.setDate(2, java.sql.Date.valueOf(doctor.getDateOfBirth()));
+            ps.setString(3, doctor.getGender().name());
+            ps.setString(4, doctor.getEmail());
+            ps.setString(5, doctor.getPhoneNumber());
+            ps.setInt(6, doctor.getDepartmentId());
+            ps.setString(7, doctor.getSpecialization());
+            ps.setInt(8, doctor.getDoctorId()); 
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+            
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+                  
 }

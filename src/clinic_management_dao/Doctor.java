@@ -1,10 +1,12 @@
 package clinic_management_dao;
 
+import java.time.LocalDate;
+import java.util.Date;
 public class Doctor {
     private int doctorId;
     private String fullName;
-    private String gender;
-    private String dateOfBirth; // có thể dùng java.sql.Date nếu muốn quản lý dạng DATE
+    private Gender gender;
+    private LocalDate dateOfBirth; 
     private String email;
     private String phoneNumber;
     private String specialization;
@@ -13,7 +15,7 @@ public class Doctor {
     public Doctor() {
     }
 
-    public Doctor(int doctorId, String fullName, String gender, String dateOfBirth,
+    public Doctor(int doctorId, String fullName, Gender gender, LocalDate dateOfBirth,
                   String email, String phoneNumber, String specialization, int departmentId) {
         this.doctorId = doctorId;
         this.fullName = fullName;
@@ -26,6 +28,7 @@ public class Doctor {
     }
 
     // Getters & Setters
+
     public int getDoctorId() {
         return doctorId;
     }
@@ -42,19 +45,19 @@ public class Doctor {
         this.fullName = fullName;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
-    public String getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -89,4 +92,5 @@ public class Doctor {
     public void setDepartmentId(int departmentId) {
         this.departmentId = departmentId;
     }
+    
 }

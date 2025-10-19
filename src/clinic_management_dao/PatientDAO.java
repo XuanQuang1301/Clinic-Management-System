@@ -24,7 +24,7 @@ public class PatientDAO {
                         rs.getString("phone_number"),
                         rs.getString("date_of_birth"),
                         rs.getString("address"),
-                        rs.getString("blood_group"),
+                        BloodGroup.valueOf(rs.getString("blood_group")),
                         rs.getString("email"),
                         rs.getString("insurance_number")
                 );
@@ -64,7 +64,7 @@ public class PatientDAO {
             pst.setString(3, p.getPhoneNumber());
             pst.setString(4, p.getDateOfBirth());
             pst.setString(5, p.getAddress());
-            pst.setString(6, p.getBloodGroup());
+            pst.setString(6, p.getBloodGroup().name());
             pst.setString(7, p.getEmail());
             pst.setString(8, p.getInsuranceNumber());
             pst.setInt(9, p.getId());
@@ -121,7 +121,7 @@ public class PatientDAO {
                         rs.getString("phone_number"),
                         rs.getString("date_of_birth"),
                         rs.getString("address"),
-                        rs.getString("blood_group"),
+                        BloodGroup.valueOf(rs.getString("blood_group")),
                         rs.getString("email"),
                         rs.getString("insurance_number")
                 );
