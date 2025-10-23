@@ -11,7 +11,7 @@ import java.util.*;
 import java.sql.*; 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
+import java.text.SimpleDateFormat;
 public class AddAppointment extends javax.swing.JDialog {
     private Connection conn;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AddAppointment.class.getName());
@@ -20,6 +20,9 @@ public class AddAppointment extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+        loadPatients();
+        loadDoctors();
+        loadRooms();
     }
     public AddAppointment(Connection conn) {
         this.conn = conn; 
@@ -229,14 +232,17 @@ public class AddAppointment extends javax.swing.JDialog {
         
         String date = txtDates.getText();
         String reason = txtReasons.getText();
+        SimpleDateFormat inFmt = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat outFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formatted = outFmt.format(inFmt.parse(txtDates.getText().trim()));
 
         Appointment appointment = new Appointment();
         appointment.setPatientId(patientId);
         appointment.setDoctorId(doctorId);
         appointment.setRoomId(roomId);
-        appointment.setAppointmentDate(Timestamp.valueOf(date + " 00:00:00")); // ví dụ yyyy-MM-dd
+        appointment.setAppointmentDate(Timestamp.valueOf(formatted));
         appointment.setReason(reason);
-        appointment.setStatus("Scheduled");
+        appointment.setStatus("Pending");
 
         AppointmentDAO dao = new AppointmentDAO(conn);
         dao.insertAppointment(appointment);

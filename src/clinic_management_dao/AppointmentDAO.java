@@ -8,20 +8,22 @@ import java.util.List;
 public class AppointmentDAO {
     private Connection conn; 
     public AppointmentDAO(Connection conn){
-        this.conn = conn; 
+        this.conn = Connect.ConnectDB(); 
     }
     public AppointmentDAO(){
-        
+        this.conn = Connect.ConnectDB();
     }
     // Lấy tất cả lịch khám kèm tên bệnh nhân, tên bác sĩ và số phòng
     public List<AppointmentDisplay> getAllWithNames() {
         List<AppointmentDisplay> list = new ArrayList<>();
-        String sql = "SELECT a.appointment_id, p.full_name, d.full_name, a.appointment_date, " +
-                     "a.reason, a.status, r.room_number " +
-                     "FROM appointments a " +
-                     "JOIN patients p ON a.patient_id = p.patient_id " +
-                     "JOIN doctors d ON a.doctor_id = d.doctor_id " +
-                     "JOIN rooms r ON a.room_id = r.room_id";
+        String sql = "SELECT a.appointment_id, " +
+                 "p.full_name AS patient_name, " +
+                 "d.full_name AS doctor_name, " +
+                 "a.appointment_date, a.reason, a.status, r.room_number " +
+                 "FROM appointments a " +
+                 "JOIN patients p ON a.patient_id = p.patient_id " +
+                 "JOIN doctors d ON a.doctor_id = d.doctor_id " +
+                 "JOIN rooms r ON a.room_id = r.room_id";
 
         try (Connection conn = Connect.ConnectDB();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -124,12 +126,15 @@ public class AppointmentDAO {
     public List<AppointmentDisplay> search(String patientName, String doctorName, String roomNumber) {
         List<AppointmentDisplay> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
-            "SELECT a.appointment_id, p.patient_name, d.doctor_name, a.appointment_date, " +
-            "a.reason, a.status, r.room_number " +
+            "SELECT a.appointment_id, " +
+            "p.full_name AS patient_name, " +
+            "d.full_name AS doctor_name, " +
+            "a.appointment_date, a.reason, a.status, r.room_number " +
             "FROM appointments a " +
             "JOIN patients p ON a.patient_id = p.patient_id " +
             "JOIN doctors d ON a.doctor_id = d.doctor_id " +
-            "JOIN rooms r ON a.room_id = r.room_id WHERE 1=1"
+            "JOIN rooms r ON a.room_id = r.room_id " +
+            "WHERE 1=1"
         );
 
         if (patientName != null && !patientName.trim().isEmpty()) {

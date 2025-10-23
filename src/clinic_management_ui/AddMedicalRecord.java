@@ -7,6 +7,7 @@ import java.awt.*;
 public class AddMedicalRecord extends JDialog {
 
     // DAO
+    
     private final AppointmentDAO appointmentDAO = new AppointmentDAO();
     private final DiseaseDAO diseaseDAO = new DiseaseDAO();
     private final MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();

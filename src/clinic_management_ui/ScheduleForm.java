@@ -18,8 +18,8 @@ public class ScheduleForm extends javax.swing.JFrame {
     }
     private void Get_Data(){
         try {
-            ScheduleDAO dao = new ScheduleDAO();
-            List<Object[]> list = dao.getAllSchedules(); 
+            ScheduleDAO dao = new ScheduleDAO(conn);
+            List<Object[]> list = dao.getSchedulesWithAppointmentDate(); 
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0);
             for (Object[] row : list) {
@@ -52,7 +52,15 @@ public class ScheduleForm extends javax.swing.JFrame {
             new String [] {
                 "ScheduleID", "Doctor Name ", "Schedule Date ", "Room "
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.setBackground(new java.awt.Color(255, 153, 153));
@@ -124,7 +132,12 @@ public class ScheduleForm extends javax.swing.JFrame {
     public static void main(String args[]) {
        java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ScheduleForm(null).setVisible(true);
+                Connection conn = Connect.ConnectDB();
+                if (conn != null) {
+                    new ScheduleForm(conn).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Cannot connect to database!");
+                }
             }
         });
     }

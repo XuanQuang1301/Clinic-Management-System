@@ -6,7 +6,7 @@ import java.util.List;
 import clinic_management_dao.PatientDAO;
 import clinic_management_dao.Patient;
 import clinic_management_dao.BloodGroup; 
-
+import java.time.LocalDate; 
 
 public class PatientForm extends javax.swing.JFrame {
 
@@ -153,6 +153,11 @@ public class PatientForm extends javax.swing.JFrame {
         jButton5.setText("Patient");
 
         jButton6.setText("Doctor");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("Appointment");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -162,6 +167,11 @@ public class PatientForm extends javax.swing.JFrame {
         });
 
         jButton8.setText("Medical Record");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         jButton9.setText("Login");
 
@@ -326,7 +336,13 @@ public class PatientForm extends javax.swing.JFrame {
     // them benh nhan
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         AddPatient addPatient = new AddPatient();
-        addPatient.setVisible(true);   
+        addPatient.setVisible(true); 
+        addPatient.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                Get_Data(); // Tải lại bảng khi AddPatient đóng
+            }
+        });
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // xoa benh nhan
@@ -354,23 +370,47 @@ public class PatientForm extends javax.swing.JFrame {
             return;
         }
 
-        Patient p = new Patient(
-                Integer.parseInt(jTable1.getValueAt(row, 0).toString()),
-                jTable1.getValueAt(row, 1).toString(),
-                jTable1.getValueAt(row, 2).toString(),
-                jTable1.getValueAt(row, 3).toString(),
-                jTable1.getValueAt(row, 4).toString(),
-                jTable1.getValueAt(row, 5).toString(),
-                BloodGroup.valueOf(jTable1.getValueAt(row, 6).toString()),
-                jTable1.getValueAt(row, 7).toString(),
-                jTable1.getValueAt(row, 8).toString()
-        );
+        String dobStr = jTable1.getValueAt(row, 4).toString().trim();
+        LocalDate dob = null;
+        try {
+            // Chấp nhận cả 2 định dạng: dd/MM/yyyy và yyyy-MM-dd
+            if (dobStr.contains("/")) {
+                java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                dob = LocalDate.parse(dobStr, formatter);
+            } else {
+                dob = LocalDate.parse(dobStr);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                "Ngày sinh không hợp lệ! Vui lòng nhập đúng dạng dd/MM/yyyy hoặc yyyy-MM-dd.",
+                "Lỗi ngày sinh", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        if (patientDAO.updatePatient(p)) {
-            JOptionPane.showMessageDialog(this, "Cập nhật thành công");
-            Get_Data();
-        } else {
-            JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
+        try {
+            Patient p = new Patient(
+                    Integer.parseInt(jTable1.getValueAt(row, 0).toString()),
+                    jTable1.getValueAt(row, 1).toString(),
+                    jTable1.getValueAt(row, 2).toString(),
+                    jTable1.getValueAt(row, 3).toString(),
+                    dob, // LocalDate đúng chuẩn
+                    jTable1.getValueAt(row, 5).toString(),
+                    BloodGroup.valueOf(jTable1.getValueAt(row, 6).toString()),
+                    jTable1.getValueAt(row, 7).toString(),
+                    jTable1.getValueAt(row, 8).toString()
+            );
+
+            if (patientDAO.updatePatient(p)) {
+                JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+                Get_Data();
+            } else {
+                JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                "Đã xảy ra lỗi khi cập nhật: " + ex.getMessage(),
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -420,6 +460,8 @@ public class PatientForm extends javax.swing.JFrame {
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         // TODO add your handling code here:
+        BillForm billForm = new BillForm(); 
+        billForm.setVisible(true);
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
@@ -431,6 +473,18 @@ public class PatientForm extends javax.swing.JFrame {
         AppointmentForm appointmentForm = new AppointmentForm();
         appointmentForm.setVisible(true);       // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        DoctorForm doctorForm = new DoctorForm(this); 
+        doctorForm.setVisible(true);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        MedicalRecordForm medicalForm = new MedicalRecordForm();
+        medicalForm.setVisible(true);
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     public static void main(String args[]) {
         /* Create and display the form */

@@ -290,8 +290,8 @@ public class AddDoctorDialog extends javax.swing.JDialog {
                 }
             }
             if (success) {
-            if (this.getOwner() instanceof DoctorManagementForm) {
-                ((DoctorManagementForm) this.getOwner()).loadDoctorsToTable();
+            if (this.getOwner() instanceof DoctorForm) {
+                ((DoctorForm) this.getOwner()).loadDoctorsToTable();
             }
             this.dispose(); 
             }

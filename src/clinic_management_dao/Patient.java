@@ -1,18 +1,18 @@
 package clinic_management_dao;
-
+import java.time.LocalDate;
 public class Patient {
     private int id;
     private String fullName;
     private String gender;
     private String phoneNumber;
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     private String address;
     private BloodGroup bloodGroup;
     private String email;
     private String insuranceNumber;
 
     public Patient(int id, String fullName, String gender, String phoneNumber,
-                   String dateOfBirth, String address, BloodGroup bloodGroup,
+                   LocalDate dateOfBirth, String address, BloodGroup bloodGroup,
                    String email, String insuranceNumber) {
         this.id = id;
         this.fullName = fullName;
@@ -38,8 +38,8 @@ public class Patient {
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
-    public String getDateOfBirth() { return dateOfBirth; }
-    public void setDateOfBirth(String dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public LocalDate getDateOfBirth() { return dateOfBirth; }
+    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }

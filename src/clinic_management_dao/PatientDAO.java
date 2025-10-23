@@ -2,6 +2,7 @@ package clinic_management_dao;
 
 import clinic_management_ui.Connect;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +17,15 @@ public class PatientDAO {
              PreparedStatement pst = con.prepareStatement(sql);
              ResultSet rs = pst.executeQuery()) {
 
-            while (rs.next()) {
+            while (rs.next())                                                                                                                                                                                               {
+                java.sql.Date dobSql = rs.getDate("date_of_birth");
+                LocalDate dob = (dobSql != null) ? dobSql.toLocalDate() : null;
                 Patient p = new Patient(
                         rs.getInt("patient_id"),
                         rs.getString("full_name"),
                         rs.getString("gender"),
                         rs.getString("phone_number"),
-                        rs.getString("date_of_birth"),
+                        dob, 
                         rs.getString("address"),
                         BloodGroup.valueOf(rs.getString("blood_group")),
                         rs.getString("email"),
@@ -62,7 +65,7 @@ public class PatientDAO {
             pst.setString(1, p.getFullName());
             pst.setString(2, p.getGender());
             pst.setString(3, p.getPhoneNumber());
-            pst.setString(4, p.getDateOfBirth());
+            pst.setDate(4, Date.valueOf(p.getDateOfBirth()));
             pst.setString(5, p.getAddress());
             pst.setString(6, p.getBloodGroup().name());
             pst.setString(7, p.getEmail());
@@ -119,7 +122,7 @@ public class PatientDAO {
                         rs.getString("full_name"),
                         rs.getString("gender"),
                         rs.getString("phone_number"),
-                        rs.getString("date_of_birth"),
+                        rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("address"),
                         BloodGroup.valueOf(rs.getString("blood_group")),
                         rs.getString("email"),
@@ -133,8 +136,8 @@ public class PatientDAO {
     }
 
     public boolean insertPatient(String fullname, String gender, String birthday,
-                                String address, String contact, String blood,
-                                String insurance, String email) {
+                            String address, String contact, String blood,
+                            String insurance, String email) {
         String sql = "INSERT INTO patients (full_name, gender, date_of_birth, address, " +
                      "phone_number, blood_group, insurance_number, email) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -142,9 +145,21 @@ public class PatientDAO {
         try (Connection con = Connect.ConnectDB();
              PreparedStatement pst = con.prepareStatement(sql)) {
 
+            java.sql.Date sqlDate = null;
+            if (birthday != null && !birthday.isEmpty()) {
+                try {
+                    java.text.SimpleDateFormat fromFormat = new java.text.SimpleDateFormat("dd/MM/yyyy");
+                    java.text.SimpleDateFormat toFormat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                    java.util.Date utilDate = fromFormat.parse(birthday);
+                    sqlDate = java.sql.Date.valueOf(toFormat.format(utilDate));
+                } catch (Exception ex) {
+                    System.err.println("⚠️ Lỗi định dạng ngày sinh: " + ex.getMessage());
+                }
+            }
+
             pst.setString(1, fullname);
             pst.setString(2, gender);
-            pst.setString(3, birthday);
+            pst.setDate(3, sqlDate);
             pst.setString(4, address);
             pst.setString(5, contact);
             pst.setString(6, blood);

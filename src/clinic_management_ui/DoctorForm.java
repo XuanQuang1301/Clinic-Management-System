@@ -1,19 +1,23 @@
 package clinic_management_ui;
 
+import clinic_management_dao.Department;
+import clinic_management_dao.DepartmentDAO;
 import clinic_management_dao.DoctorDAO;
 import clinic_management_dao.Doctor;
+import clinic_management_dao.Doctor;
+import clinic_management_dao.DoctorDAO;
 import static java.lang.reflect.Array.set;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class DoctorForm extends javax.swing.JFrame {
-    
+ 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoctorForm.class.getName());
-
     private JFrame parentForm;
-    
+
     public DoctorForm(JFrame parent) {
         initComponents();
         tblDoctors.setShowGrid(true);
@@ -24,10 +28,10 @@ public class DoctorForm extends javax.swing.JFrame {
         loadDoctorsToTable();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
-
+    
+    @SuppressWarnings("unchecked")
     public void loadDoctorsToTable() {
-        DoctorDAO dao = new DoctorDAO(); 
-        List<Doctor> doctorList = dao.getAllDoctors();
+        List<Doctor> doctorList = DoctorDAO.getAllDoctors();
         DefaultTableModel model = (DefaultTableModel) tblDoctors.getModel();
         model.setRowCount(0);
         for (Doctor doctor : doctorList) {
@@ -41,20 +45,18 @@ public class DoctorForm extends javax.swing.JFrame {
                 doctor.getSpecialization(),});
         }
     }
-    
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        btnPatientManagement = new javax.swing.JButton();
+        btnDoctorManagement = new javax.swing.JButton();
+        btnDepartmentManagerment = new javax.swing.JButton();
+        btnAppointmentManagement = new javax.swing.JButton();
+        btnMedicalRecordManagement = new javax.swing.JButton();
+        btnBillManagement = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblDoctors = new javax.swing.JTable();
@@ -74,36 +76,61 @@ public class DoctorForm extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 204, 204));
 
-        jButton5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton5.setText("Patient");
-
-        jButton6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton6.setText("Doctor");
-
-        jButton10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton10.setText("Department");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        btnPatientManagement.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnPatientManagement.setText("Patient");
+        btnPatientManagement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                btnPatientManagementActionPerformed(evt);
             }
         });
 
-        jButton7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton7.setText("Appointment");
-
-        jButton8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton8.setText("Medical Record");
-
-        jButton11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton11.setText("Bill");
-        jButton11.addActionListener(new java.awt.event.ActionListener() {
+        btnDoctorManagement.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnDoctorManagement.setText("Doctor");
+        btnDoctorManagement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton11ActionPerformed(evt);
+                btnDoctorManagementActionPerformed(evt);
             }
         });
 
-        jButton9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton9.setText("Login");
+        btnDepartmentManagerment.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnDepartmentManagerment.setText("Department");
+        btnDepartmentManagerment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDepartmentManagermentActionPerformed(evt);
+            }
+        });
+
+        btnAppointmentManagement.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnAppointmentManagement.setText("Appointment");
+        btnAppointmentManagement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAppointmentManagementActionPerformed(evt);
+            }
+        });
+
+        btnMedicalRecordManagement.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnMedicalRecordManagement.setText("Medical Record");
+        btnMedicalRecordManagement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMedicalRecordManagementActionPerformed(evt);
+            }
+        });
+
+        btnBillManagement.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnBillManagement.setText("Bill");
+        btnBillManagement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBillManagementActionPerformed(evt);
+            }
+        });
+
+        btnLogout.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
         jLabel1.setText("Clinic Management");
@@ -119,14 +146,14 @@ public class DoctorForm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(62, 62, 62)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton9)
+                    .addComponent(btnLogout)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton8)
-                        .addComponent(jButton7)
-                        .addComponent(jButton6)
-                        .addComponent(jButton5)
-                        .addComponent(jButton10)
-                        .addComponent(jButton11)))
+                        .addComponent(btnMedicalRecordManagement)
+                        .addComponent(btnAppointmentManagement)
+                        .addComponent(btnDoctorManagement)
+                        .addComponent(btnPatientManagement)
+                        .addComponent(btnDepartmentManagerment)
+                        .addComponent(btnBillManagement)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -135,19 +162,19 @@ public class DoctorForm extends javax.swing.JFrame {
                 .addGap(67, 67, 67)
                 .addComponent(jLabel1)
                 .addGap(48, 48, 48)
-                .addComponent(jButton5)
+                .addComponent(btnPatientManagement)
                 .addGap(18, 18, 18)
-                .addComponent(jButton6)
+                .addComponent(btnDoctorManagement)
                 .addGap(18, 18, 18)
-                .addComponent(jButton10)
+                .addComponent(btnDepartmentManagerment)
                 .addGap(18, 18, 18)
-                .addComponent(jButton7)
+                .addComponent(btnAppointmentManagement)
                 .addGap(18, 18, 18)
-                .addComponent(jButton8)
+                .addComponent(btnMedicalRecordManagement)
                 .addGap(18, 18, 18)
-                .addComponent(jButton11)
+                .addComponent(btnBillManagement)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton9)
+                .addComponent(btnLogout)
                 .addGap(24, 24, 24))
         );
 
@@ -285,17 +312,35 @@ public class DoctorForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
 
+    private void populateDoctorTable(List<Doctor> doctorList) {
+        DefaultTableModel model = (DefaultTableModel) tblDoctors.getModel();
+        model.setRowCount(0);
+        for (Doctor doctor : doctorList) {
+            Object[] row = new Object[]{
+                doctor.getDoctorId(),
+                doctor.getFullName(),
+                doctor.getEmail(),
+                doctor.getGender(),
+                doctor.getDateOfBirth(),
+                doctor.getPhoneNumber(),
+                doctor.getSpecialization(),
+                doctor.getDepartmentId(),};
+            model.addRow(row);
+        }
+    }
     private void btnAddDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddDoctorActionPerformed
 
-        AddDoctorDialog dialog = new AddDoctorDialog(this, true);
+         AddDoctorDialog dialog = new AddDoctorDialog(this, true);
         dialog.setVisible(true);
         loadDoctorsToTable();
+
     }//GEN-LAST:event_btnAddDoctorActionPerformed
 
     private void btnDeleteDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteDoctorActionPerformed
 
-        int selectedRow = tblDoctors.getSelectedRow();
+         int selectedRow = tblDoctors.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một bác sĩ để xóa.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             return;
@@ -373,13 +418,66 @@ public class DoctorForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSearchDoctorActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+    private void btnDepartmentManagermentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepartmentManagermentActionPerformed
 
-    }//GEN-LAST:event_jButton10ActionPerformed
+        DepartmentForm departmentForm = new DepartmentForm();
+        departmentForm.setVisible(true);
+        this.setVisible(false);    
+    }//GEN-LAST:event_btnDepartmentManagermentActionPerformed
 
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+    private void btnBillManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBillManagementActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton11ActionPerformed
+        
+//        BillForm billForm = null;
+//        try {
+//            billForm = new BillForm();
+//        } catch (SQLException ex) {
+//            System.getLogger(DoctorForm.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+//        }
+//        billForm.setVisible(true);
+//        this.setVisible(false);                                                
+ 
+    }//GEN-LAST:event_btnBillManagementActionPerformed
+
+    private void btnPatientManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatientManagementActionPerformed
+        // TODO add your handling code here:
+        PatientForm patientForm = new PatientForm();
+        patientForm.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnPatientManagementActionPerformed
+
+    private void btnDoctorManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoctorManagementActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDoctorManagementActionPerformed
+
+    private void btnAppointmentManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAppointmentManagementActionPerformed
+        // TODO add your handling code here:
+        AppointmentForm appointmentForm = new AppointmentForm();
+        appointmentForm.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAppointmentManagementActionPerformed
+
+    private void btnMedicalRecordManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMedicalRecordManagementActionPerformed
+        // TODO add your handling code here:MedicalRecordForm medicalRecordForm = new MedicalRecordForm();
+        MedicalRecordForm medicalRecordForm = new MedicalRecordForm();
+        medicalRecordForm.setVisible(true);
+        this.setVisible(false);
+        
+    }//GEN-LAST:event_btnMedicalRecordManagementActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Bạn có chắc chắn muốn đăng xuất không?", 
+            "Xác nhận Đăng xuất", 
+            JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) 
+        {
+            this.dispose();
+            LoginForm loginForm = new LoginForm();
+            loginForm.setVisible(true);
+        }
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -397,16 +495,16 @@ public class DoctorForm extends javax.swing.JFrame {
     private javax.swing.JLabel LabelSearchTerm;
     private javax.swing.JComboBox<String> SearchCriteria;
     private javax.swing.JButton btnAddDoctor;
+    private javax.swing.JButton btnAppointmentManagement;
+    private javax.swing.JButton btnBillManagement;
     private javax.swing.JButton btnDeleteDoctor;
+    private javax.swing.JButton btnDepartmentManagerment;
+    private javax.swing.JButton btnDoctorManagement;
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnMedicalRecordManagement;
+    private javax.swing.JButton btnPatientManagement;
     private javax.swing.JButton btnSearchDoctor;
     private javax.swing.JButton btnUpdateDoctor;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -415,7 +513,4 @@ public class DoctorForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtSearchDoctor;
     // End of variables declaration//GEN-END:variables
 
-    private void populateDoctorTable(List<Doctor> searchResult) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

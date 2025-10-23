@@ -6,7 +6,7 @@ public class Doctor {
     private int doctorId;
     private String fullName;
     private Gender gender;
-    private LocalDate dateOfBirth; 
+    private LocalDate dateOfBirth;
     private String email;
     private String phoneNumber;
     private String specialization;

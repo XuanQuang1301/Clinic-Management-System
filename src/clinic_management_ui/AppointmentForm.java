@@ -12,14 +12,16 @@ public class AppointmentForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentForm.class.getName());
     private Connection conn; 
+    
     public AppointmentForm() {
         initComponents();
+        conn = Connect.ConnectDB(); 
         Get_Data();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
     }
     @SuppressWarnings("unchecked")
     private void Get_Data() {
-        AppointmentDAO dao = new AppointmentDAO();
+        AppointmentDAO dao = new AppointmentDAO(conn);
         List<AppointmentDisplay> appointmentList = dao.getAllWithNames(); // lấy dữ liệu hiển thị
         DefaultTableModel model = (DefaultTableModel) tblAppointments.getModel(); 
         model.setRowCount(0); // xóa dữ liệu cũ
@@ -124,7 +126,12 @@ public class AppointmentForm extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText("Login");
+        jButton6.setText("Logout");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
         jLabel1.setText("Clinic Management");
@@ -329,7 +336,7 @@ public class AppointmentForm extends javax.swing.JFrame {
         String doctorName  = jTextField5.getText().trim();
         String roomNumber  = jTextField4.getText().trim();
 
-        AppointmentDAO dao = new AppointmentDAO();
+        AppointmentDAO dao = new AppointmentDAO(conn);
         List<AppointmentDisplay> appointmentList = dao.search(patientName, doctorName, roomNumber);
 
         DefaultTableModel model = (DefaultTableModel) tblAppointments.getModel(); 
@@ -378,7 +385,7 @@ public class AppointmentForm extends javax.swing.JFrame {
                 int appointmentId = Integer.parseInt(tblAppointments.getValueAt(selectedRow, 0).toString());
 
                 // Khởi tạo DAO
-                AppointmentDAO appointmentDAO = new AppointmentDAO();
+                AppointmentDAO appointmentDAO = new AppointmentDAO(conn);
 
                 // Gọi phương thức xóa
                 boolean isDeleted = appointmentDAO.deleteAppointment(appointmentId);
@@ -432,6 +439,8 @@ public class AppointmentForm extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        DoctorForm doctorForm = new DoctorForm(this); 
+        doctorForm.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -448,6 +457,12 @@ public class AppointmentForm extends javax.swing.JFrame {
     private void btnSearchAppointments1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchAppointments1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSearchAppointments1ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+//        AdminForm adminForm = new AdminForm(this); 
+//        adminForm.setVisible(true);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
