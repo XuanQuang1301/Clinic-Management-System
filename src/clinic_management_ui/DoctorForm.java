@@ -17,7 +17,9 @@ public class DoctorForm extends javax.swing.JFrame {
  
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoctorForm.class.getName());
     private JFrame parentForm;
-
+    public DoctorForm() {
+        this(null); 
+    }
     public DoctorForm(JFrame parent) {
         initComponents();
         tblDoctors.setShowGrid(true);
@@ -45,7 +47,7 @@ public class DoctorForm extends javax.swing.JFrame {
                 doctor.getSpecialization(),});
         }
     }
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -311,7 +313,7 @@ public class DoctorForm extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
     
 
     private void populateDoctorTable(List<Doctor> doctorList) {
@@ -330,15 +332,15 @@ public class DoctorForm extends javax.swing.JFrame {
             model.addRow(row);
         }
     }
-    private void btnAddDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddDoctorActionPerformed
+    private void btnAddDoctorActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
          AddDoctorDialog dialog = new AddDoctorDialog(this, true);
         dialog.setVisible(true);
         loadDoctorsToTable();
 
-    }//GEN-LAST:event_btnAddDoctorActionPerformed
+    }                                            
 
-    private void btnDeleteDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteDoctorActionPerformed
+    private void btnDeleteDoctorActionPerformed(java.awt.event.ActionEvent evt) {                                                
 
          int selectedRow = tblDoctors.getSelectedRow();
         if (selectedRow == -1) {
@@ -370,9 +372,9 @@ public class DoctorForm extends javax.swing.JFrame {
                 System.err.println("Lỗi khi xóa bác sĩ: " + e.getMessage());
             }
         }
-    }//GEN-LAST:event_btnDeleteDoctorActionPerformed
+    }                                               
 
-    private void btnUpdateDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateDoctorActionPerformed
+    private void btnUpdateDoctorActionPerformed(java.awt.event.ActionEvent evt) {                                                
 
         int selectedRow = tblDoctors.getSelectedRow();
         if (selectedRow == -1) {
@@ -393,13 +395,13 @@ public class DoctorForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Có lỗi " + e.getMessage());
             e.printStackTrace();
         }
-    }//GEN-LAST:event_btnUpdateDoctorActionPerformed
+    }                                               
 
-    private void SearchCriteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchCriteriaActionPerformed
+    private void SearchCriteriaActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-    }//GEN-LAST:event_SearchCriteriaActionPerformed
+    }                                              
 
-    private void btnSearchDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDoctorActionPerformed
+    private void btnSearchDoctorActionPerformed(java.awt.event.ActionEvent evt) {                                                
 
         String searchTerm = txtSearchDoctor.getText().trim();
         String searchBy = (String) SearchCriteria.getSelectedItem();
@@ -416,16 +418,16 @@ public class DoctorForm extends javax.swing.JFrame {
         } else {
             populateDoctorTable(searchResult);
         }
-    }//GEN-LAST:event_btnSearchDoctorActionPerformed
+    }                                               
 
-    private void btnDepartmentManagermentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepartmentManagermentActionPerformed
+    private void btnDepartmentManagermentActionPerformed(java.awt.event.ActionEvent evt) {                                                         
 
         DepartmentForm departmentForm = new DepartmentForm();
         departmentForm.setVisible(true);
         this.setVisible(false);    
-    }//GEN-LAST:event_btnDepartmentManagermentActionPerformed
+    }                                                        
 
-    private void btnBillManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBillManagementActionPerformed
+    private void btnBillManagementActionPerformed(java.awt.event.ActionEvent evt) {                                                  
         // TODO add your handling code here:
         
 //        BillForm billForm = null;
@@ -437,35 +439,35 @@ public class DoctorForm extends javax.swing.JFrame {
 //        billForm.setVisible(true);
 //        this.setVisible(false);                                                
  
-    }//GEN-LAST:event_btnBillManagementActionPerformed
+    }                                                 
 
-    private void btnPatientManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatientManagementActionPerformed
+    private void btnPatientManagementActionPerformed(java.awt.event.ActionEvent evt) {                                                     
         // TODO add your handling code here:
         PatientForm patientForm = new PatientForm();
         patientForm.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_btnPatientManagementActionPerformed
+    }                                                    
 
-    private void btnDoctorManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoctorManagementActionPerformed
+    private void btnDoctorManagementActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnDoctorManagementActionPerformed
+    }                                                   
 
-    private void btnAppointmentManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAppointmentManagementActionPerformed
+    private void btnAppointmentManagementActionPerformed(java.awt.event.ActionEvent evt) {                                                         
         // TODO add your handling code here:
         AppointmentForm appointmentForm = new AppointmentForm();
         appointmentForm.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_btnAppointmentManagementActionPerformed
+    }                                                        
 
-    private void btnMedicalRecordManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMedicalRecordManagementActionPerformed
+    private void btnMedicalRecordManagementActionPerformed(java.awt.event.ActionEvent evt) {                                                           
         // TODO add your handling code here:MedicalRecordForm medicalRecordForm = new MedicalRecordForm();
         MedicalRecordForm medicalRecordForm = new MedicalRecordForm();
         medicalRecordForm.setVisible(true);
         this.setVisible(false);
         
-    }//GEN-LAST:event_btnMedicalRecordManagementActionPerformed
+    }                                                          
 
-    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
         int confirm = JOptionPane.showConfirmDialog(this, 
             "Bạn có chắc chắn muốn đăng xuất không?", 
@@ -477,7 +479,7 @@ public class DoctorForm extends javax.swing.JFrame {
             LoginForm loginForm = new LoginForm();
             loginForm.setVisible(true);
         }
-    }//GEN-LAST:event_btnLogoutActionPerformed
+    }                                         
 
     /**
      * @param args the command line arguments
@@ -490,7 +492,7 @@ public class DoctorForm extends javax.swing.JFrame {
     });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JLabel LabelSearchCriteria;
     private javax.swing.JLabel LabelSearchTerm;
     private javax.swing.JComboBox<String> SearchCriteria;
@@ -511,6 +513,6 @@ public class DoctorForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblDoctors;
     private javax.swing.JTextField txtSearchDoctor;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 
 }
