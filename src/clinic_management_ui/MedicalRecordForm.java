@@ -280,11 +280,11 @@ public class MedicalRecordForm extends JFrame {
         navPanel.add(btnLogout, gbc);
 
         
-        btnDoctor.addActionListener(e -> { new DoctorForm().setVisible(true); this.dispose(); });
-        btnDepartment.addActionListener(e -> { new DepartmentForm().setVisible(true); this.dispose(); });
-        btnBill.addActionListener(e -> { new BillForm().setVisible(true); this.dispose(); });
-        btnPatient.addActionListener(e -> { new PatientForm().setVisible(true); this.dispose(); });
-        btnAppointment.addActionListener(e -> { new AppointmentForm().setVisible(true); this.dispose(); });
+        btnDoctor.addActionListener(e -> { new DoctorForm().setVisible(true);});
+        btnDepartment.addActionListener(e -> { new DepartmentForm().setVisible(true); });
+        btnBill.addActionListener(e -> { new BillForm().setVisible(true);});
+        btnPatient.addActionListener(e -> { new PatientForm().setVisible(true);});
+        btnAppointment.addActionListener(e -> { new AppointmentForm().setVisible(true); });
     }
 
     private void editSelectedRecord() {
