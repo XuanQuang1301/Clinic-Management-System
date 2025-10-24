@@ -47,7 +47,6 @@ public class MedicalRecordForm extends JFrame {
     private DefaultTableModel prescriptionTableModel;
     private JTextField txtMedicineName, txtDosage, txtQuantity;
     private JTextArea txtInstructions;
-    // === Đổi tên các nút ===
     private JButton btnAddOrUpdate, btnNew, btnDeletePrescription;
     private JPanel navPanel;
 
