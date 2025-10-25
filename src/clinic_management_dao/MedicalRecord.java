@@ -7,13 +7,11 @@ public class MedicalRecord {
     private int appointmentId;
     private int patientId;
     private int doctorId;
-    private Integer diseaseId; 
-    private String diseaseName; 
     private String diagnosis;
     private String treatment;
     private Date createdAt;
 
-    // Getters and Setters
+    
     public int getRecordId() { return recordId; }
     public void setRecordId(int recordId) { this.recordId = recordId; }
 
@@ -25,13 +23,6 @@ public class MedicalRecord {
 
     public int getDoctorId() { return doctorId; }
     public void setDoctorId(int doctorId) { this.doctorId = doctorId; }
-
-    public Integer getDiseaseId() { return diseaseId; }
-    public void setDiseaseId(Integer diseaseId) { this.diseaseId = diseaseId; }
-
-    // THÊM GETTER VÀ SETTER NÀY
-    public String getDiseaseName() { return diseaseName; }
-    public void setDiseaseName(String diseaseName) { this.diseaseName = diseaseName; }
 
     public String getDiagnosis() { return diagnosis; }
     public void setDiagnosis(String diagnosis) { this.diagnosis = diagnosis; }
