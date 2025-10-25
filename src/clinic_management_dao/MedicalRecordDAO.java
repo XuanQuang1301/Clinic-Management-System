@@ -11,16 +11,18 @@ import java.util.List;
 public class MedicalRecordDAO {
 
     public boolean addMedicalRecord(MedicalRecord record) {
-        String sql = "INSERT INTO medical_records (appointment_id, patient_id, doctor_id, disease_id, diagnosis, treatment) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO medical_records (appointment_id, patient_id, doctor_id, diagnosis, treatment) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = Connect.ConnectDB(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, record.getAppointmentId());
             ps.setInt(2, record.getPatientId());
             ps.setInt(3, record.getDoctorId());
-            if (record.getDiseaseId() == 0) { ps.setNull(4, java.sql.Types.INTEGER); } else { ps.setInt(4, record.getDiseaseId()); }
-            ps.setString(5, record.getDiagnosis());
-            ps.setString(6, record.getTreatment());
+            ps.setString(4, record.getDiagnosis());  
+            ps.setString(5, record.getTreatment());  
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); return false; }
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+            return false; 
+        }
     }
 
     public boolean deleteMedicalRecord(int recordId) {
@@ -28,15 +30,13 @@ public class MedicalRecordDAO {
         try (Connection conn = Connect.ConnectDB(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, recordId);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); return false; }
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+            return false; 
+        }
     }
 
-    /**
-     * Cập nhật lại phần chẩn đoán (diagnosis) cho một hồ sơ bệnh án.
-     * @param recordId ID của hồ sơ cần cập nhật.
-     * @param newDiagnosis Chuỗi chẩn đoán mới.
-     * @return true nếu cập nhật thành công, false nếu thất bại.
-     */
+    
     public boolean updateMedicalRecordDiagnosis(int recordId, String newDiagnosis) {
         String sql = "UPDATE medical_records SET diagnosis = ? WHERE record_id = ?";
         try (Connection conn = Connect.ConnectDB();
@@ -60,22 +60,31 @@ public class MedicalRecordDAO {
                     MedicalRecord record = new MedicalRecord();
                     record.setRecordId(rs.getInt("record_id"));
                     record.setAppointmentId(rs.getInt("appointment_id"));
+                    record.setPatientId(rs.getInt("patient_id"));
+                    record.setDoctorId(rs.getInt("doctor_id"));
+                    record.setDiagnosis(rs.getString("diagnosis"));
+                    record.setTreatment(rs.getString("treatment"));
                     list.add(record);
                 }
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+        }
         return list;
     }
 
     public List<MedicalRecordDisplay> getAllRecordsWithDetails() {
         List<MedicalRecordDisplay> list = new ArrayList<>();
-        String sql = "SELECT mr.record_id, p.full_name, d.full_name, a.appointment_date, mr.diagnosis " +
+        String sql = "SELECT mr.record_id, p.full_name AS patient_name, d.full_name AS doctor_name, " +
+                     "a.appointment_date, mr.diagnosis " +
                      "FROM medical_records mr " +
                      "JOIN appointments a ON mr.appointment_id = a.appointment_id " +
                      "JOIN patients p ON a.patient_id = p.patient_id " +
                      "JOIN doctors d ON mr.doctor_id = d.doctor_id " +
                      "ORDER BY a.appointment_date DESC";
-        try (Connection conn = Connect.ConnectDB(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = Connect.ConnectDB(); 
+             PreparedStatement ps = conn.prepareStatement(sql); 
+             ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 MedicalRecordDisplay record = new MedicalRecordDisplay();
                 record.setRecordId(rs.getInt("record_id"));
@@ -85,20 +94,24 @@ public class MedicalRecordDAO {
                 record.setDiagnosis(rs.getString("diagnosis"));
                 list.add(record);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+        }
         return list;
     }
 
     public List<MedicalRecordDisplay> searchRecords(String patientName, String doctorName) {
         List<MedicalRecordDisplay> list = new ArrayList<>();
-        String sql = "SELECT mr.record_id, p.patient_name, d.doctor_name, a.appointment_date, mr.diagnosis " +
+        String sql = "SELECT mr.record_id, p.full_name AS patient_name, d.full_name AS doctor_name, " +
+                     "a.appointment_date, mr.diagnosis " +
                      "FROM medical_records mr " +
                      "JOIN appointments a ON mr.appointment_id = a.appointment_id " +
                      "JOIN patients p ON mr.patient_id = p.patient_id " +
                      "JOIN doctors d ON mr.doctor_id = d.doctor_id " +
-                     "WHERE p.patient_name LIKE ? AND d.doctor_name LIKE ? " +
+                     "WHERE p.full_name LIKE ? AND d.full_name LIKE ? " +
                      "ORDER BY a.appointment_date DESC";
-        try (Connection conn = Connect.ConnectDB(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = Connect.ConnectDB(); 
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, "%" + (patientName != null ? patientName : "") + "%");
             ps.setString(2, "%" + (doctorName != null ? doctorName : "") + "%");
             try (ResultSet rs = ps.executeQuery()) {
@@ -112,7 +125,9 @@ public class MedicalRecordDAO {
                     list.add(record);
                 }
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+        }
         return list;
     }
 }
