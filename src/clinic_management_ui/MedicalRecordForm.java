@@ -47,6 +47,7 @@ public class MedicalRecordForm extends JFrame {
     private DefaultTableModel prescriptionTableModel;
     private JTextField txtMedicineName, txtDosage, txtQuantity;
     private JTextArea txtInstructions;
+    // === Đổi tên các nút ===
     private JButton btnAddOrUpdate, btnNew, btnDeletePrescription;
     private JPanel navPanel;
 
@@ -246,9 +247,9 @@ public class MedicalRecordForm extends JFrame {
         gbc.anchor = GridBagConstraints.NORTH;
         navPanel.add(title, gbc);
 
-        
+        gbc.insets = new Insets(12, 30, 12, 0); 
         gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.anchor = GridBagConstraints.WEST;
         gbc.weighty = 0; 
 
         JButton btnPatient = new JButton("Patient");
@@ -275,7 +276,7 @@ public class MedicalRecordForm extends JFrame {
         btnLogout.setFocusPainted(false);
         btnLogout.setPreferredSize(new Dimension(140, 30));
         gbc.weighty = 0;
-        gbc.anchor = GridBagConstraints.SOUTH;
+        gbc.anchor = GridBagConstraints.WEST;
         navPanel.add(btnLogout, gbc);
 
         
