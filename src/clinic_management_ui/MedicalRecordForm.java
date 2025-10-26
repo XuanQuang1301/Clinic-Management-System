@@ -9,9 +9,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,13 +29,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.event.ListSelectionEvent;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-import java.util.List;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Dimension;
+
 public class MedicalRecordForm extends JFrame {
 
     private final MedicalRecordDAO recordDAO = new MedicalRecordDAO();
@@ -47,14 +48,13 @@ public class MedicalRecordForm extends JFrame {
     private DefaultTableModel prescriptionTableModel;
     private JTextField txtMedicineName, txtDosage, txtQuantity;
     private JTextArea txtInstructions;
-    // === Đổi tên các nút ===
     private JButton btnAddOrUpdate, btnNew, btnDeletePrescription;
     private JPanel navPanel;
 
     public MedicalRecordForm() {
         super("Clinic Management - Medical Records");
         initComponents();
-        loadAllRecords();
+        loadAllRecords(); 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1000, 700);
         setLocationRelativeTo(null);
@@ -80,7 +80,10 @@ public class MedicalRecordForm extends JFrame {
         this.setContentPane(mainPanel);
     }
 
-    private void backToMainPage() { new AppointmentForm().setVisible(true); this.dispose(); }
+    private void backToMainPage() {
+        new AppointmentForm().setVisible(true);
+        this.dispose();
+    }
 
     private JPanel createMedicalRecordPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
@@ -104,20 +107,24 @@ public class MedicalRecordForm extends JFrame {
         searchPanel.add(buttonsPanel);
         panel.add(searchPanel, BorderLayout.NORTH);
         recordTableModel = new DefaultTableModel(new String[]{"ID", "Patient", "Doctor", "Date", "Diagnosis"}, 0) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
         tblRecords = new JTable(recordTableModel);
         tblRecords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         panel.add(new JScrollPane(tblRecords), BorderLayout.CENTER);
         tblRecords.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) updatePrescriptionView();
+            if (!e.getValueIsAdjusting()) {
+                updatePrescriptionView();
+            }
         });
         btnSearch.addActionListener(evt -> searchRecords());
         btnEditRecord.addActionListener(evt -> editSelectedRecord());
         btnDeleteRecord.addActionListener(evt -> deleteSelectedRecord());
         return panel;
     }
-
 
     private JPanel createPrescriptionPanel() {
         prescriptionPanel = new JPanel(new BorderLayout(10, 10));
@@ -139,8 +146,8 @@ public class MedicalRecordForm extends JFrame {
         formContainer.add(formPanel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
-        btnAddOrUpdate = new JButton("Add / Update"); 
-        btnNew = new JButton("New"); 
+        btnAddOrUpdate = new JButton("Add / Update");
+        btnNew = new JButton("New");
         btnDeletePrescription = new JButton("Delete");
 
         buttonPanel.add(btnAddOrUpdate);
@@ -151,7 +158,10 @@ public class MedicalRecordForm extends JFrame {
         prescriptionPanel.add(formContainer, BorderLayout.NORTH);
 
         prescriptionTableModel = new DefaultTableModel(new String[]{"ID", "Medicine", "Dosage", "Qty"}, 0) {
-             @Override public boolean isCellEditable(int r, int c) { return false; }
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
         tblPrescriptions = new JTable(prescriptionTableModel);
         prescriptionPanel.add(new JScrollPane(tblPrescriptions), BorderLayout.CENTER);
@@ -161,12 +171,7 @@ public class MedicalRecordForm extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = tblPrescriptions.getSelectedRow();
                 if (selectedRow != -1) {
-                    currentlyEditingPrescriptionId = (Integer) tblPrescriptions.getValueAt(selectedRow, 0);
-                    txtMedicineName.setText((String) tblPrescriptions.getValueAt(selectedRow, 1));
-                    txtDosage.setText((String) tblPrescriptions.getValueAt(selectedRow, 2));
-                    txtQuantity.setText(String.valueOf(tblPrescriptions.getValueAt(selectedRow, 3)));
-                    Prescription p = prescriptionDAO.getPrescriptionById(currentlyEditingPrescriptionId);
-                    if (p != null) txtInstructions.setText(p.getInstructions());
+                    showPrescriptionDetails(selectedRow);
                 }
             }
         });
@@ -178,7 +183,121 @@ public class MedicalRecordForm extends JFrame {
         setPrescriptionPanelEnabled(false);
         return prescriptionPanel;
     }
+    private void loadAllRecords() {
+        btnSearch.setEnabled(false);
+        btnEditRecord.setEnabled(false);
+        btnDeleteRecord.setEnabled(false);
 
+
+        SwingWorker<List<MedicalRecordDisplay>, Void> worker = new SwingWorker<List<MedicalRecordDisplay>, Void>() {
+            
+            @Override
+            protected List<MedicalRecordDisplay> doInBackground() throws Exception {
+                recordDAO.synchronizeMedicalRecords();
+                return recordDAO.getAllRecordsWithDetails();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    
+                    List<MedicalRecordDisplay> list = get();
+                    recordTableModel.setRowCount(0);
+                    if (list != null) {
+                        for (MedicalRecordDisplay record : list) {
+                            recordTableModel.addRow(new Object[]{
+                                record.getRecordId(), record.getPatientName(), record.getDoctorName(),
+                                record.getAppointmentDate(), record.getDiagnosis()
+                            });
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(MedicalRecordForm.this,
+                            "Error loading data: " + e.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } finally {
+                    
+                    btnSearch.setEnabled(true);
+                    btnEditRecord.setEnabled(true);
+                    btnDeleteRecord.setEnabled(true);
+                }
+            }
+        };
+
+        
+        worker.execute();
+    }
+
+    private void createNavigationPanel() {
+        navPanel = new JPanel(new GridBagLayout());
+        navPanel.setBackground(new Color(255, 204, 204));
+        navPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
+        navPanel.setPreferredSize(new Dimension(180, 0));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(12, 0, 12, 0);
+
+        JLabel title = new JLabel("Clinic Management");
+        title.setFont(new Font("Tahoma", Font.BOLD, 18));
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc.weighty = 0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        navPanel.add(title, gbc);
+
+        gbc.insets = new Insets(12, 30, 12, 0);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weighty = 0;
+
+        JButton btnPatient = new JButton("Patient");
+        JButton btnDoctor = new JButton("Doctor");
+        JButton btnDepartment = new JButton("Department");
+        JButton btnAppointment = new JButton("Appointment");
+        JButton btnMedicalRecord = new JButton("Medical Record");
+        JButton btnBill = new JButton("Bill");
+
+        JButton[] navButtons = {btnPatient, btnDoctor, btnDepartment, btnAppointment, btnMedicalRecord, btnBill};
+
+        for (JButton btn : navButtons) {
+            btn.setFocusPainted(false);
+            btn.setPreferredSize(new Dimension(140, 30));
+            navPanel.add(btn, gbc);
+        }
+
+        gbc.weighty = 1.0;
+        navPanel.add(new JLabel(""), gbc);
+
+        JButton btnLogout = new JButton("Logout");
+        btnLogout.setFocusPainted(false);
+        btnLogout.setPreferredSize(new Dimension(140, 30));
+        gbc.weighty = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        navPanel.add(btnLogout, gbc);
+
+        btnDoctor.addActionListener(e -> { new DoctorForm().setVisible(true); });
+        btnDepartment.addActionListener(e -> { new DepartmentForm().setVisible(true); });
+        btnBill.addActionListener(e -> { new BillForm().setVisible(true); });
+        btnPatient.addActionListener(e -> { new PatientForm().setVisible(true); });
+        btnAppointment.addActionListener(e -> { new AppointmentForm().setVisible(true); });
+        
+        
+        btnMedicalRecord.addActionListener(e -> loadAllRecords());
+    }
+
+  
+    
+    private void showPrescriptionDetails(int row) {
+        currentlyEditingPrescriptionId = (Integer) tblPrescriptions.getValueAt(row, 0);
+        txtMedicineName.setText((String) tblPrescriptions.getValueAt(row, 1));
+        txtDosage.setText((String) tblPrescriptions.getValueAt(row, 2));
+        txtQuantity.setText(String.valueOf(tblPrescriptions.getValueAt(row, 3)));
+        Prescription p = prescriptionDAO.getPrescriptionById(currentlyEditingPrescriptionId);
+        if (p != null) txtInstructions.setText(p.getInstructions());
+    }
 
     private void addOrUpdatePrescription() {
         int selectedRecordRow = tblRecords.getSelectedRow();
@@ -201,11 +320,9 @@ public class MedicalRecordForm extends JFrame {
         boolean success;
         String action;
         if (currentlyEditingPrescriptionId == null) {
-            // THÊM MỚI
             success = prescriptionDAO.addPrescription(p);
             action = "added";
         } else {
-            // CẬP NHẬT
             p.setPrescriptionId(currentlyEditingPrescriptionId);
             success = prescriptionDAO.updatePrescription(p);
             action = "updated";
@@ -228,65 +345,7 @@ public class MedicalRecordForm extends JFrame {
         currentlyEditingPrescriptionId = null;
         tblPrescriptions.clearSelection();
     }
-    private void createNavigationPanel() {
-        navPanel = new JPanel(new GridBagLayout()); 
-        navPanel.setBackground(new Color(255, 204, 204)); 
-        navPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
-        navPanel.setPreferredSize(new Dimension(180, 0));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER; 
-        gbc.fill = GridBagConstraints.HORIZONTAL;      
-        
-        gbc.insets = new Insets(12, 0, 12, 0); 
-
-        JLabel title = new JLabel("Clinic Management");
-        title.setFont(new Font("Tahoma", Font.BOLD, 18));
-        title.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.weighty = 0;
-        gbc.anchor = GridBagConstraints.NORTH;
-        navPanel.add(title, gbc);
-
-        gbc.insets = new Insets(12, 30, 12, 0); 
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.weighty = 0; 
-
-        JButton btnPatient = new JButton("Patient");
-        JButton btnDoctor = new JButton("Doctor");
-        JButton btnDepartment = new JButton("Department");
-        JButton btnAppointment = new JButton("Appointment");
-        JButton btnMedicalRecord = new JButton("Medical Record");
-        JButton btnBill = new JButton("Bill");
-
-        JButton[] navButtons = {btnPatient, btnDoctor, btnDepartment, btnAppointment, btnMedicalRecord, btnBill};
-
-        for (JButton btn : navButtons) {
-            btn.setFocusPainted(false);
-            
-            btn.setPreferredSize(new Dimension(140, 30)); 
-            navPanel.add(btn, gbc);
-        }
-
-       
-        gbc.weighty = 1.0;
-        navPanel.add(new JLabel(""), gbc);
-
-        JButton btnLogout = new JButton("Logout"); 
-        btnLogout.setFocusPainted(false);
-        btnLogout.setPreferredSize(new Dimension(140, 30));
-        gbc.weighty = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        navPanel.add(btnLogout, gbc);
-
-        
-        btnDoctor.addActionListener(e -> { new DoctorForm().setVisible(true);});
-        btnDepartment.addActionListener(e -> { new DepartmentForm().setVisible(true); });
-        btnBill.addActionListener(e -> { new BillForm().setVisible(true);});
-        btnPatient.addActionListener(e -> { new PatientForm().setVisible(true);});
-        btnAppointment.addActionListener(e -> { new AppointmentForm().setVisible(true); });
-    }
-
+    
     private void editSelectedRecord() {
         int selectedRow = tblRecords.getSelectedRow();
         if (selectedRow == -1) { JOptionPane.showMessageDialog(this, "Please select a record to edit.", "Warning", JOptionPane.WARNING_MESSAGE); return; }
@@ -299,19 +358,6 @@ public class MedicalRecordForm extends JFrame {
                 loadAllRecords();
             } else {
                 JOptionPane.showMessageDialog(this, "Failed to update diagnosis.", "Database Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-    private void loadAllRecords() {
-        List<MedicalRecordDisplay> list = recordDAO.getAllRecordsWithDetails();
-        recordTableModel.setRowCount(0);
-        if (list != null) {
-            for (MedicalRecordDisplay record : list) {
-                recordTableModel.addRow(new Object[]{
-                    record.getRecordId(), record.getPatientName(), record.getDoctorName(),
-                    record.getAppointmentDate(), record.getDiagnosis()
-                });
             }
         }
     }
@@ -366,6 +412,10 @@ public class MedicalRecordForm extends JFrame {
             for (Prescription p : list) {
                 prescriptionTableModel.addRow(new Object[]{p.getPrescriptionId(), p.getMedicineName(), p.getDosage(), p.getQuantity()});
             }
+            if (!list.isEmpty()) {
+                tblPrescriptions.setRowSelectionInterval(0, 0);
+                showPrescriptionDetails(0);
+            }
         }
     }
 
@@ -390,7 +440,7 @@ public class MedicalRecordForm extends JFrame {
                 for (Component subComponent : ((JPanel) component).getComponents()) {
                     subComponent.setEnabled(enabled);
                     if (subComponent instanceof JScrollPane) {
-                         ((JScrollPane) subComponent).getViewport().getView().setEnabled(enabled);
+                        ((JScrollPane) subComponent).getViewport().getView().setEnabled(enabled);
                     }
                 }
             }
@@ -398,10 +448,10 @@ public class MedicalRecordForm extends JFrame {
         }
         tblPrescriptions.setEnabled(enabled);
     }
+    
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {
             new MedicalRecordForm().setVisible(true);
         });
     }
-
 }
