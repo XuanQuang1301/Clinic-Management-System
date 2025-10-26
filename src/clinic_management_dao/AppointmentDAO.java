@@ -67,16 +67,33 @@ public class AppointmentDAO {
         String sql = "INSERT INTO appointments(patient_id, doctor_id, appointment_date, reason, status, room_id) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = Connect.ConnectDB();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, a.getPatientId());
             ps.setInt(2, a.getDoctorId());
             ps.setTimestamp(3, a.getAppointmentDate());
             ps.setString(4, a.getReason());
             ps.setString(5, a.getStatus());
             ps.setInt(6, a.getRoomId());
-
-            return ps.executeUpdate() > 0;
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                return false;
+            } 
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int newAppointmentId = generatedKeys.getInt(1);
+                    MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
+                    MedicalRecord newRecord = new MedicalRecord(); 
+                    newRecord.setAppointmentId(newAppointmentId);
+                    newRecord.setPatientId(a.getPatientId());
+                    newRecord.setDoctorId(a.getDoctorId());
+                    newRecord.setDiagnosis(""); 
+                    newRecord.setTreatment("");                
+                    medicalRecordDAO.addMedicalRecord(newRecord);    
+                } else {
+                    throw new SQLException("Creating appointment failed, no ID obtained.");
+                }
+            } 
+            return true;
 
         } catch (SQLException e) {
             e.printStackTrace();
