@@ -1,7 +1,7 @@
 package clinic_management_ui;
 
 import clinic_management_dao.BillDAO;
-import clinic_management_dao.Bill;
+import clinic_management_dao.BillDisplay;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -9,7 +9,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class BillForm extends javax.swing.JFrame {
 
-    // Khai báo các biến giao diện
     private javax.swing.JTable tblBills;
     private javax.swing.JTextField txtBillId;
     private javax.swing.JTextField txtPatientId;
@@ -25,10 +24,9 @@ public class BillForm extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
-    // Khởi tạo giao diện
     private void initComponents() {
         setTitle("Quản lý hóa đơn");
-        setSize(900, 500);
+        setSize(1050, 500); // Tăng chiều rộng để chứa thêm cột CreatedAt
         setLocationRelativeTo(null);
 
         tblBills = new javax.swing.JTable();
@@ -42,7 +40,9 @@ public class BillForm extends javax.swing.JFrame {
 
         tblBills.setModel(new DefaultTableModel(
                 new Object[][]{},
-                new String[]{"ID", "AppointmentID", "PatientID", "DoctorID", "DepartmentID", "ConsultationFee", "TotalAmount", "PaymentStatus", "CreatedAt"}
+                new String[]{
+                    "BillID", "PatientName", "DoctorName", "Department", "TotalAmount", "PaymentStatus", "CreatedAt"
+                }
         ));
 
         javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(tblBills);
@@ -69,75 +69,68 @@ public class BillForm extends javax.swing.JFrame {
 
         btnDeleteBill.setBounds(660, 20, 100, 40);
         panel.add(btnDeleteBill);
-        
+
         btnDashboard.setBounds(780, 20, 100, 40);
         panel.add(btnDashboard);
 
-        scrollPane.setBounds(20, 80, 850, 350);
+        scrollPane.setBounds(20, 80, 1000, 350);
         panel.add(scrollPane);
 
         add(panel);
 
-        // Gán sự kiện nút
         btnSearchBill.addActionListener(e -> btnSearchBillActionPerformed(null));
         btnPayBill.addActionListener(e -> btnPayBillActionPerformed(null));
         btnDeleteBill.addActionListener(e -> btnDeleteBillActionPerformed(null));
-        
         btnDashboard.addActionListener(e -> {
-            // --- SỬA LỖI TẠI ĐÂY ---
-            // Truyền 'this' (BillForm) vào constructor của DashboardForm
-            DashboardForm dashboard = new DashboardForm(this); 
+            DashboardForm dashboard = new DashboardForm(this);
             dashboard.setVisible(true);
-            this.dispose(); // Đóng cửa sổ BillForm hiện tại
+            this.dispose();
         });
     }
 
     private void Get_Data() {
         BillDAO dao = new BillDAO();
-        List<Bill> bills = dao.getAllBills();
+        List<BillDisplay> bills = dao.getAllBillsForDisplay();
         DefaultTableModel model = (DefaultTableModel) tblBills.getModel();
         model.setRowCount(0);
-        for (Bill b : bills) {
+        for (BillDisplay b : bills) {
             model.addRow(new Object[]{
                 b.getBillId(),
-                b.getAppointmentId(),
-                b.getPatientId(),
-                b.getDoctorId(),
-                b.getDepartmentId(),
-                b.getConsultationFee(),
+                b.getPatientName(),
+                b.getDoctorName(),
+                b.getDepartmentName(),
                 b.getTotalAmount(),
                 b.getPaymentStatus(),
-                b.getCreatedAt()
+                b.getCreatedAt() // Thêm cột này
             });
         }
     }
 
-    // Xử lý nút Tìm kiếm
     private void btnSearchBillActionPerformed(java.awt.event.ActionEvent evt) {
         String id = txtBillId.getText().trim();
         String patientId = txtPatientId.getText().trim();
         String status = cmbPaymentStatus.getSelectedItem().toString();
 
         BillDAO dao = new BillDAO();
-        List<Bill> result = dao.searchBills(id, patientId, status.equals("Tất cả") ? "" : status);
+        List<BillDisplay> result = dao.getAllBillsForDisplay();
         DefaultTableModel model = (DefaultTableModel) tblBills.getModel();
         model.setRowCount(0);
-        for (Bill b : result) {
+        for (BillDisplay b : result) {
+            if (!id.isEmpty() && b.getBillId() != Integer.parseInt(id)) continue;
+            if (!patientId.isEmpty() && !b.getPatientName().contains(patientId)) continue;
+            if (!status.equals("Tất cả") && !b.getPaymentStatus().equalsIgnoreCase(status)) continue;
             model.addRow(new Object[]{
                 b.getBillId(),
-                b.getAppointmentId(),
-                b.getPatientId(),
-                b.getDoctorId(),
-                b.getDepartmentId(),
-                b.getConsultationFee(),
+                b.getPatientName(),
+                b.getDoctorName(),
+                b.getDepartmentName(),
                 b.getTotalAmount(),
                 b.getPaymentStatus(),
-                b.getCreatedAt()
+                b.getCreatedAt() // Thêm cột này
             });
         }
     }
 
-    // Xử lý nút Thanh toán
     private void btnPayBillActionPerformed(java.awt.event.ActionEvent evt) {
         int selectedRow = tblBills.getSelectedRow();
         if (selectedRow == -1) {
@@ -155,7 +148,6 @@ public class BillForm extends javax.swing.JFrame {
         }
     }
 
-    // Xử lý nút Xóa
     private void btnDeleteBillActionPerformed(java.awt.event.ActionEvent evt) {
         int selectedRow = tblBills.getSelectedRow();
         if (selectedRow == -1) {

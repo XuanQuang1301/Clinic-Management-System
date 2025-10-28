@@ -5,24 +5,20 @@ import java.sql.Timestamp;
 
 public class Bill {
     private int billId;
-    private int appointmentId;
     private int patientId;
     private int doctorId;
     private int departmentId;
-    private BigDecimal consultationFee;
     private BigDecimal totalAmount;
     private String paymentStatus;
     private Timestamp createdAt;
 
     public Bill() {}
 
-    public Bill(int billId, int appointmentId, int patientId, int doctorId, int departmentId, BigDecimal consultationFee, BigDecimal totalAmount, String paymentStatus, Timestamp createdAt) {
+    public Bill(int billId, int patientId, int doctorId, int departmentId, BigDecimal totalAmount, String paymentStatus, Timestamp createdAt) {
         this.billId = billId;
-        this.appointmentId = appointmentId;
         this.patientId = patientId;
         this.doctorId = doctorId;
         this.departmentId = departmentId;
-        this.consultationFee = consultationFee;
         this.totalAmount = totalAmount;
         this.paymentStatus = paymentStatus;
         this.createdAt = createdAt;
@@ -32,9 +28,6 @@ public class Bill {
     public int getBillId() { return billId; }
     public void setBillId(int billId) { this.billId = billId; }
 
-    public int getAppointmentId() { return appointmentId; }
-    public void setAppointmentId(int appointmentId) { this.appointmentId = appointmentId; }
-
     public int getPatientId() { return patientId; }
     public void setPatientId(int patientId) { this.patientId = patientId; }
 
@@ -43,9 +36,6 @@ public class Bill {
 
     public int getDepartmentId() { return departmentId; }
     public void setDepartmentId(int departmentId) { this.departmentId = departmentId; }
-
-    public BigDecimal getConsultationFee() { return consultationFee; }
-    public void setConsultationFee(BigDecimal consultationFee) { this.consultationFee = consultationFee; }
 
     public BigDecimal getTotalAmount() { return totalAmount; }
     public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }

@@ -23,9 +23,6 @@ public class AdminForm extends javax.swing.JFrame {
         this.currentAdmin = admin;
         setTitle("Admin Dashboard - Welcome " + currentAdmin.getFullName());
     }
-    public AdminForm(){
-        
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -199,7 +196,7 @@ public class AdminForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         DoctorForm doctorManagementForm = new DoctorForm(this);
         doctorManagementForm.setVisible(true);
-        this.setVisible(false); 
+        //this.setVisible(false); 
     }//GEN-LAST:event_btnDoctorManagementActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
@@ -220,7 +217,7 @@ public class AdminForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         DepartmentManagementForm departmentManagementForm = new DepartmentManagementForm(this);
         departmentManagementForm.setVisible(true);
-        this.setVisible(false);     
+        //this.setVisible(false);     
     }//GEN-LAST:event_btnDepartmentManagementActionPerformed
 
     private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
@@ -277,6 +274,8 @@ public class AdminForm extends javax.swing.JFrame {
 
         /* Create and display the form */
         //java.awt.EventQueue.invokeLater(() -> new AdminForm().setVisible(true));
+        User currentAdmin = new User(); 
+        java.awt.EventQueue.invokeLater(() -> new AdminForm(currentAdmin).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

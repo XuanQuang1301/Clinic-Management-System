@@ -91,6 +91,12 @@ public class AddAppointment extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
+        cbPatient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbPatientActionPerformed(evt);
+            }
+        });
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Patient Name:");
 
@@ -245,7 +251,7 @@ public class AddAppointment extends javax.swing.JDialog {
         appointment.setStatus("Pending");
 
         AppointmentDAO dao = new AppointmentDAO(conn);
-        dao.insertAppointment(appointment);
+        dao.insert(appointment);
 
         JOptionPane.showMessageDialog(this, "Đặt lịch thành công!");
         this.dispose();
@@ -263,6 +269,10 @@ public class AddAppointment extends javax.swing.JDialog {
     private void txtDatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDatesActionPerformed
 
     }//GEN-LAST:event_txtDatesActionPerformed
+
+    private void cbPatientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPatientActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbPatientActionPerformed
 
     /**
      * @param args the command line arguments

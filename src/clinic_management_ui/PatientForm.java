@@ -174,6 +174,11 @@ public class PatientForm extends javax.swing.JFrame {
         });
 
         jButton9.setText("Login");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
         jLabel1.setText("Clinic Management");
@@ -485,6 +490,19 @@ public class PatientForm extends javax.swing.JFrame {
         MedicalRecordForm medicalForm = new MedicalRecordForm();
         medicalForm.setVisible(true);
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Bạn có chắc chắn muốn đăng xuất không?", 
+            "Xác nhận Đăng xuất", 
+            JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) 
+        {
+            this.dispose();
+            LoginForm loginForm = new LoginForm();
+            loginForm.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     public static void main(String args[]) {
         /* Create and display the form */

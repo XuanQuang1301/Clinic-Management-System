@@ -4,16 +4,21 @@ import clinic_management_ui.Connect;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
 
 public class AppointmentDAO {
     private Connection conn; 
+
     public AppointmentDAO(Connection conn){
         this.conn = Connect.ConnectDB(); 
     }
     public AppointmentDAO(){
         this.conn = Connect.ConnectDB();
     }
-    // Lấy tất cả lịch khám kèm tên bệnh nhân, tên bác sĩ và số phòng
+
+    // ==========================
+    // Lấy danh sách lịch khám
+    // ==========================
     public List<AppointmentDisplay> getAllWithNames() {
         List<AppointmentDisplay> list = new ArrayList<>();
         String sql = "SELECT a.appointment_id, " +
@@ -46,41 +51,31 @@ public class AppointmentDAO {
         }
         return list;
     }
-    public boolean insertAppointment(Appointment appointment) throws SQLException {
-        String sql = "INSERT INTO appointments(patient_id, doctor_id, room_id, appointment_date, reason, status) "
-                   + "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setInt(1, appointment.getPatientId());
-            pst.setInt(2, appointment.getDoctorId());
-            pst.setInt(3, appointment.getRoomId());
-            pst.setTimestamp(4, appointment.getAppointmentDate());
-            pst.setString(5, appointment.getReason());
-            pst.setString(6, appointment.getStatus());
-
-            int rows = pst.executeUpdate();
-            return rows > 0; // nếu rows > 0 là insert thành công
-        }
-    }
-    // Thêm lịch khám mới (vẫn dùng ID)
-    public boolean add(Appointment a) {
+    // ==========================
+    // Thêm lịch khám mới (CÓ TẠO HÓA ĐƠN)
+    // ==========================
+    public boolean insert(Appointment a) {
         String sql = "INSERT INTO appointments(patient_id, doctor_id, appointment_date, reason, status, room_id) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = Connect.ConnectDB();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            
             ps.setInt(1, a.getPatientId());
             ps.setInt(2, a.getDoctorId());
             ps.setTimestamp(3, a.getAppointmentDate());
             ps.setString(4, a.getReason());
             ps.setString(5, a.getStatus());
             ps.setInt(6, a.getRoomId());
+
             int affectedRows = ps.executeUpdate();
-            if (affectedRows == 0) {
-                return false;
-            } 
+            if (affectedRows == 0) return false;
+
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int newAppointmentId = generatedKeys.getInt(1);
+
+                    // ===== 1️⃣ Tạo hồ sơ bệnh án rỗng =====
                     MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
                     MedicalRecord newRecord = new MedicalRecord(); 
                     newRecord.setAppointmentId(newAppointmentId);
@@ -89,6 +84,23 @@ public class AppointmentDAO {
                     newRecord.setDiagnosis(""); 
                     newRecord.setTreatment("");                
                     medicalRecordDAO.addMedicalRecord(newRecord);    
+
+                    // ===== 2️⃣ Tạo hóa đơn tự động =====
+                    BillDAO billDAO = new BillDAO();
+                    Bill bill = new Bill();
+                    bill.setPatientId(a.getPatientId());
+                    bill.setDoctorId(a.getDoctorId());
+
+                    // Lấy department_id của bác sĩ
+                    int departmentId = getDepartmentIdByDoctor(a.getDoctorId());
+                    bill.setDepartmentId(departmentId);
+
+                    // Lấy phí khám của khoa
+                    BigDecimal consultationFee = getConsultationFeeByDepartment(departmentId);
+                    bill.setTotalAmount(consultationFee);
+                    bill.setPaymentStatus("Unpaid");
+
+                    billDAO.insertBill(bill);
                 } else {
                     throw new SQLException("Creating appointment failed, no ID obtained.");
                 }
@@ -101,7 +113,36 @@ public class AppointmentDAO {
         }
     }
 
+    // ==========================
+    // Hàm phụ trợ
+    // ==========================
+    private int getDepartmentIdByDoctor(int doctorId) {
+        String sql = "SELECT department_id FROM doctors WHERE doctor_id = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, doctorId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) return rs.getInt("department_id");
+        } catch (SQLException e) {
+            System.err.println("Error getDepartmentIdByDoctor: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    private BigDecimal getConsultationFeeByDepartment(int departmentId) {
+        String sql = "SELECT consultation_fee FROM departments WHERE department_id = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, departmentId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) return rs.getBigDecimal("consultation_fee");
+        } catch (SQLException e) {
+            System.err.println("Error getConsultationFeeByDepartment: " + e.getMessage());
+        }
+        return BigDecimal.ZERO;
+    }
+
+    // ==========================
     // Cập nhật lịch khám
+    // ==========================
     public boolean update(Appointment a) {
         String sql = "UPDATE appointments SET patient_id=?, doctor_id=?, appointment_date=?, reason=?, status=?, room_id=? " +
                      "WHERE appointment_id=?";
@@ -124,7 +165,9 @@ public class AppointmentDAO {
         }
     }
 
+    // ==========================
     // Xóa lịch khám
+    // ==========================
     public boolean deleteAppointment(int appointmentId) {
         String sql = "DELETE FROM appointments WHERE appointment_id=?";
         try (Connection conn = Connect.ConnectDB();
@@ -139,7 +182,42 @@ public class AppointmentDAO {
         }
     }
 
-    // Tìm kiếm lịch khám theo patientName, doctorName hoặc roomNumber
+    // ==========================
+    // Lấy danh sách theo bệnh nhân
+    // ==========================
+    public List<Appointment> getAppointmentsByPatientId(int patientId) {
+        List<Appointment> list = new ArrayList<>();
+        String sql = "SELECT * FROM appointments WHERE patient_id = ?";
+        
+        try (Connection con = Connect.ConnectDB();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+            
+            pst.setInt(1, patientId);
+            
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Appointment app = new Appointment();
+                    app.setAppointmentId(rs.getInt("appointment_id"));
+                    app.setPatientId(rs.getInt("patient_id"));
+                    app.setDoctorId(rs.getInt("doctor_id"));
+                    app.setAppointmentDate(rs.getTimestamp("appointment_date")); 
+                    app.setReason(rs.getString("reason"));
+                    app.setStatus(rs.getString("status"));
+                    if (rs.getObject("room_id") != null) {
+                        app.setRoomId(rs.getInt("room_id"));
+                    }
+                    list.add(app);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // ==========================
+    // 🔍 HÀM SEARCH (đã chỉnh đúng)
+    // ==========================
     public List<AppointmentDisplay> search(String patientName, String doctorName, String roomNumber) {
         List<AppointmentDisplay> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
@@ -155,10 +233,10 @@ public class AppointmentDAO {
         );
 
         if (patientName != null && !patientName.trim().isEmpty()) {
-            sql.append(" AND p.patient_name LIKE ?");
+            sql.append(" AND p.full_name LIKE ?");
         }
         if (doctorName != null && !doctorName.trim().isEmpty()) {
-            sql.append(" AND d.doctor_name LIKE ?");
+            sql.append(" AND d.full_name LIKE ?");
         }
         if (roomNumber != null && !roomNumber.trim().isEmpty()) {
             sql.append(" AND r.room_number LIKE ?");
@@ -192,36 +270,6 @@ public class AppointmentDAO {
                 }
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-    public List<Appointment> getAppointmentsByPatientId(int patientId) {
-        List<Appointment> list = new ArrayList<>();
-        String sql = "SELECT * FROM appointments WHERE patient_id = ?";
-        
-        try (Connection con = Connect.ConnectDB();
-             PreparedStatement pst = con.prepareStatement(sql)) {
-            
-            pst.setInt(1, patientId);
-            
-            try (ResultSet rs = pst.executeQuery()) {
-                while (rs.next()) {
-                    Appointment app = new Appointment();
-                    app.setAppointmentId(rs.getInt("appointment_id"));
-                    app.setPatientId(rs.getInt("patient_id"));
-                    app.setDoctorId(rs.getInt("doctor_id"));
-                    // Chú ý: Cột trong DB của bạn có thể là DATETIME hoặc TIMESTAMP
-                    app.setAppointmentDate(rs.getTimestamp("appointment_date")); 
-                    app.setReason(rs.getString("reason"));
-                    app.setStatus(rs.getString("status"));
-                    if (rs.getObject("room_id") != null) {
-                        app.setRoomId(rs.getInt("room_id"));
-                    }
-                    list.add(app);
-                }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

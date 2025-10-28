@@ -126,7 +126,7 @@ public class AppointmentForm extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText("Logout");
+        jButton6.setText("Login");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -462,6 +462,16 @@ public class AppointmentForm extends javax.swing.JFrame {
         // TODO add your handling code here:
 //        AdminForm adminForm = new AdminForm(this); 
 //        adminForm.setVisible(true);
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Bạn có chắc chắn muốn đăng xuất không?", 
+            "Xác nhận Đăng xuất", 
+            JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) 
+        {
+            this.dispose();
+            LoginForm loginForm = new LoginForm();
+            loginForm.setVisible(true);
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**

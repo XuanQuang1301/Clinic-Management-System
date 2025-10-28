@@ -19,7 +19,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JLabel; 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -283,7 +283,20 @@ public class MedicalRecordForm extends JFrame {
         btnBill.addActionListener(e -> { new BillForm().setVisible(true); });
         btnPatient.addActionListener(e -> { new PatientForm().setVisible(true); });
         btnAppointment.addActionListener(e -> { new AppointmentForm().setVisible(true); });
-        
+        btnLogout.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Bạn có chắc chắn muốn đăng xuất không?",
+                "Xác nhận Đăng xuất",
+                JOptionPane.YES_NO_OPTION
+            );
+            if (confirm == JOptionPane.YES_OPTION) {
+                this.dispose();
+                LoginForm loginForm = new LoginForm();
+                loginForm.setVisible(true);
+            }
+        });
+
         
         btnMedicalRecord.addActionListener(e -> loadAllRecords());
     }
