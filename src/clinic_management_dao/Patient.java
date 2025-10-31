@@ -52,4 +52,8 @@ public class Patient {
 
     public String getInsuranceNumber() { return insuranceNumber; }
     public void setInsuranceNumber(String insuranceNumber) { this.insuranceNumber = insuranceNumber; }
+
+    String getDateOfFBirth() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

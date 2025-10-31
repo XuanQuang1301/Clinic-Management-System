@@ -32,6 +32,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Dimension;
+import javax.swing.Box;
 
 public class MedicalRecordForm extends JFrame {
 
@@ -57,7 +58,7 @@ public class MedicalRecordForm extends JFrame {
         initComponents();
         loadAllRecords(); 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1000, 700);
+        setSize(960, 540);
         setLocationRelativeTo(null);
     }
 
@@ -193,6 +194,7 @@ public class MedicalRecordForm extends JFrame {
         setPrescriptionPanelEnabled(false);
         return prescriptionPanel;
     }
+    
     private void loadAllRecords() {
         btnSearch.setEnabled(false);
         btnEditRecord.setEnabled(false);
@@ -239,30 +241,31 @@ public class MedicalRecordForm extends JFrame {
         
         worker.execute();
     }
-
+    
     private void createNavigationPanel() {
         navPanel = new JPanel(new GridBagLayout());
         navPanel.setBackground(new Color(255, 204, 204));
-        navPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
-        navPanel.setPreferredSize(new Dimension(180, 0));
+        navPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Căn lề đẹp hơn
+        navPanel.setPreferredSize(new Dimension(200, 540));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(12, 0, 12, 0);
+        gbc.weightx = 1.0;
 
+        // --- Tiêu đề ---
         JLabel title = new JLabel("Clinic Management");
-        title.setFont(new Font("Tahoma", Font.BOLD, 18));
+        title.setFont(new Font("Tahoma", Font.BOLD, 16));
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.weighty = 0;
+        title.setForeground(Color.BLACK);
+
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 20, 0); // khoảng cách giữa tiêu đề và nút đầu tiên
         gbc.anchor = GridBagConstraints.NORTH;
+        gbc.weighty = 0;
         navPanel.add(title, gbc);
 
-        gbc.insets = new Insets(12, 30, 12, 0);
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.weighty = 0;
-
+        // --- Các nút chức năng ---
         JButton btnPatient = new JButton("Patient");
         JButton btnDoctor = new JButton("Doctor");
         JButton btnDepartment = new JButton("Department");
@@ -270,29 +273,50 @@ public class MedicalRecordForm extends JFrame {
         JButton btnMedicalRecord = new JButton("Medical Record");
         JButton btnBill = new JButton("Bill");
 
-        JButton[] navButtons = {btnPatient, btnDoctor, btnDepartment, btnAppointment, btnMedicalRecord, btnBill};
+        JButton[] navButtons = {
+            btnPatient, btnDoctor, btnDepartment, btnAppointment, btnMedicalRecord, btnBill
+        };
 
+        gbc.insets = new Insets(10, 0, 10, 0); // khoảng cách giữa các nút
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        int y = 1;
         for (JButton btn : navButtons) {
             btn.setFocusPainted(false);
-            btn.setPreferredSize(new Dimension(140, 30));
+            btn.setBackground(Color.WHITE);
+            btn.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+            btn.setPreferredSize(new Dimension(100, 30)); // đồng bộ kích thước
+            gbc.gridy = y++;
             navPanel.add(btn, gbc);
         }
 
-        gbc.weighty = 1.0;
-        navPanel.add(new JLabel(""), gbc);
+        // --- Khoảng trống co giãn ---
+        gbc.gridy = y++;
+        gbc.weighty = 1.0; // đẩy nút Logout xuống cuối
+        navPanel.add(Box.createVerticalGlue(), gbc);
 
+        // --- Nút Logout ---
         JButton btnLogout = new JButton("Logout");
         btnLogout.setFocusPainted(false);
-        btnLogout.setPreferredSize(new Dimension(140, 30));
+        btnLogout.setBackground(Color.WHITE);
+        btnLogout.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        btnLogout.setPreferredSize(new Dimension(80, 30));
+
+        gbc.gridy = y;
+        gbc.insets = new Insets(10, 0, 0, 0);
         gbc.weighty = 0;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.NONE;
         navPanel.add(btnLogout, gbc);
 
-        btnDoctor.addActionListener(e -> { new DoctorForm().setVisible(true); });
-        btnDepartment.addActionListener(e -> { new DepartmentForm().setVisible(true); });
-        btnBill.addActionListener(e -> { new BillForm().setVisible(true); });
-        btnPatient.addActionListener(e -> { new PatientForm().setVisible(true); });
-        btnAppointment.addActionListener(e -> { new AppointmentForm().setVisible(true); });
+        // --- Sự kiện ---
+        btnDoctor.addActionListener(e -> new DoctorForm().setVisible(true));
+        btnDepartment.addActionListener(e -> new DepartmentForm().setVisible(true));
+        btnBill.addActionListener(e -> new BillForm().setVisible(true));
+        btnPatient.addActionListener(e -> new PatientForm().setVisible(true));
+        btnAppointment.addActionListener(e -> new AppointmentForm().setVisible(true));
+        btnMedicalRecord.addActionListener(e -> loadAllRecords());
+
         btnLogout.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(
                 this,
@@ -302,16 +326,11 @@ public class MedicalRecordForm extends JFrame {
             );
             if (confirm == JOptionPane.YES_OPTION) {
                 this.dispose();
-                LoginForm loginForm = new LoginForm();
-                loginForm.setVisible(true);
+                new LoginForm().setVisible(true);
             }
         });
-
-        
-        btnMedicalRecord.addActionListener(e -> loadAllRecords());
     }
 
-  
     
     private void showPrescriptionDetails(int row) {
         currentlyEditingPrescriptionId = (Integer) tblPrescriptions.getValueAt(row, 0);

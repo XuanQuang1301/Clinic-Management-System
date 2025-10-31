@@ -1,6 +1,7 @@
 
 package clinic.management.system;
 import clinic_management_ui.LoginForm;
+import clinic_management_utils.UIHelper;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import javax.swing.UIManager;
@@ -10,6 +11,8 @@ public class ClinicManagementSystem {
         try {
             // Cài đặt Look and Feel của FlatLaf
             UIManager.setLookAndFeel(new FlatLightLaf());
+            UIHelper.setupGlobalCentering();
+
 
             // 2. Định nghĩa bảng màu mới
             Color primaryPink = new Color(255, 228, 225); // Màu hồng nền chính (Pastel Pink)
