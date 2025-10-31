@@ -36,9 +36,9 @@ public class LoginForm extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(0, 0));
 
-        jLabel1.setText("Tên Đăng Nhập:");
+        jLabel1.setText("Username:");
 
-        jLabel2.setText("Mật Khẩu:");
+        jLabel2.setText("Password:");
 
         txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtUsername.addActionListener(new java.awt.event.ActionListener() {
@@ -86,9 +86,7 @@ public class LoginForm extends javax.swing.JFrame {
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(29, 29, 29)
                                     .addComponent(txtPasswords, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(164, 164, 164))))))
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(48, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)

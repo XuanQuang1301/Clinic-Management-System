@@ -165,7 +165,7 @@ public class AddDoctorDialog extends javax.swing.JDialog {
         LabelGender.setText("Gender:");
 
         jComboBox2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nội khoa", "Sản phụ khoa", "Phụ khoa", "Ngoại Khoa", "Da liễu", "Chuẩn đoán hình ảnh", "Gây mê hồi sức", "Y học cổ truyền", "Y tế công cộng", "Răng hàm mặt" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Internal Medicine", "Obstetrics and Gynecology", "Gynecology", "Surgery", "Dermatology", "Radiology", "Anesthesiology", "Traditional Medicine", "Public Health", "Odonto-Stomatology" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

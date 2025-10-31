@@ -420,14 +420,14 @@
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="9" rowCount="4">
                     <Column editable="true" title="ID" type="java.lang.Object"/>
-                    <Column editable="true" title="H&#x1ecd; v&#xe0; t&#xea;n" type="java.lang.Object"/>
-                    <Column editable="true" title="Gi&#x1edb;i t&#xed;nh" type="java.lang.Object"/>
-                    <Column editable="true" title="S&#x1ed1; &#x111;i&#x1ec7;n tho&#x1ea1;i" type="java.lang.Object"/>
-                    <Column editable="true" title="Ng&#xe0;y sinh" type="java.lang.Object"/>
-                    <Column editable="true" title="&#x110;&#x1ecb;a ch&#x1ec9;" type="java.lang.Object"/>
-                    <Column editable="true" title="Nh&#xf3;m m&#xe1;u" type="java.lang.Object"/>
+                    <Column editable="true" title="Patient Name" type="java.lang.Object"/>
+                    <Column editable="true" title="Gender" type="java.lang.Object"/>
+                    <Column editable="true" title="Phone Number" type="java.lang.Object"/>
+                    <Column editable="true" title="Birthday" type="java.lang.Object"/>
+                    <Column editable="true" title="Address" type="java.lang.Object"/>
+                    <Column editable="true" title="Blood" type="java.lang.Object"/>
                     <Column editable="true" title="Email" type="java.lang.Object"/>
-                    <Column editable="true" title="Th&#x1ebb; b&#x1ea3;o hi&#x1ec3;m" type="java.lang.Object"/>
+                    <Column editable="true" title="Insurance" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

@@ -48,10 +48,7 @@
                                   <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                                   <Component id="txtPasswords" min="-2" pref="229" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel2" min="-2" pref="94" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="164" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jLabel2" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -104,12 +101,12 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="T&#xea;n &#x110;&#x103;ng Nh&#x1ead;p:"/>
+        <Property name="text" type="java.lang.String" value="Username:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="M&#x1ead;t Kh&#x1ea9;u:"/>
+        <Property name="text" type="java.lang.String" value="Password:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtUsername">

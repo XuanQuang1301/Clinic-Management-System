@@ -228,7 +228,7 @@ public class DoctorForm extends javax.swing.JFrame {
         });
 
         SearchCriteria.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        SearchCriteria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tên bác sĩ", " " }));
+        SearchCriteria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Doctor Name" }));
         SearchCriteria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SearchCriteriaActionPerformed(evt);
@@ -254,7 +254,7 @@ public class DoctorForm extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Họ và tên", "Email", "Giới tính", "Ngày sinh", "Số điện thoại", "Chuyên khoa"
+                "ID", "Doctor Name", "Email", "Gender", "Birthday", "Phone Number", "Specialty"
             }
         ));
         jScrollPane2.setViewportView(tblDoctors);
@@ -267,9 +267,9 @@ public class DoctorForm extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 486, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(23, 23, 23))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -294,7 +294,7 @@ public class DoctorForm extends javax.swing.JFrame {
                                 .addGap(81, 81, 81)
                                 .addComponent(txtSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(83, 83, 83)))
-                        .addGap(55, 61, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2))))
@@ -303,7 +303,7 @@ public class DoctorForm extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSearchDoctor)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -319,9 +319,9 @@ public class DoctorForm extends javax.swing.JFrame {
                     .addComponent(btnDeleteDoctor)
                     .addComponent(btnUpdateDoctor)
                     .addComponent(btnAddDoctor))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

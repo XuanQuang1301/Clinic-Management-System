@@ -63,9 +63,10 @@ public class ScheduleForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.setBackground(new java.awt.Color(255, 153, 153));
+        jPanel1.setBackground(new java.awt.Color(255, 204, 204));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        jLabel1.setBackground(new java.awt.Color(255, 204, 204));
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel1.setText("Schedule ");
 

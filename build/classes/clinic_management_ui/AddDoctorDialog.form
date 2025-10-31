@@ -290,16 +290,16 @@
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="10">
-            <StringItem index="0" value="N&#x1ed9;i khoa"/>
-            <StringItem index="1" value="S&#x1ea3;n ph&#x1ee5; khoa"/>
-            <StringItem index="2" value="Ph&#x1ee5; khoa"/>
-            <StringItem index="3" value="Ngo&#x1ea1;i Khoa"/>
-            <StringItem index="4" value="Da li&#x1ec5;u"/>
-            <StringItem index="5" value="Chu&#x1ea9;n &#x111;o&#xe1;n h&#xec;nh &#x1ea3;nh"/>
-            <StringItem index="6" value="G&#xe2;y m&#xea; h&#x1ed3;i s&#x1ee9;c"/>
-            <StringItem index="7" value="Y h&#x1ecd;c c&#x1ed5; truy&#x1ec1;n"/>
-            <StringItem index="8" value="Y t&#x1ebf; c&#xf4;ng c&#x1ed9;ng"/>
-            <StringItem index="9" value="R&#x103;ng h&#xe0;m m&#x1eb7;t"/>
+            <StringItem index="0" value="Internal Medicine"/>
+            <StringItem index="1" value="Obstetrics and Gynecology"/>
+            <StringItem index="2" value="Gynecology"/>
+            <StringItem index="3" value="Surgery"/>
+            <StringItem index="4" value="Dermatology"/>
+            <StringItem index="5" value="Radiology"/>
+            <StringItem index="6" value="Anesthesiology"/>
+            <StringItem index="7" value="Traditional Medicine"/>
+            <StringItem index="8" value="Public Health"/>
+            <StringItem index="9" value="Odonto-Stomatology"/>
           </StringArray>
         </Property>
       </Properties>

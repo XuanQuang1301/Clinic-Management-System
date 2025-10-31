@@ -240,7 +240,7 @@ public class PatientForm extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Họ và tên", "Giới tính", "Số điện thoại", "Ngày sinh", "Địa chỉ", "Nhóm máu", "Email", "Thẻ bảo hiểm"
+                "ID", "Patient Name", "Gender", "Phone Number", "Birthday", "Address", "Blood", "Email", "Insurance"
             }
         ));
         jScrollPane2.setViewportView(jTable1);

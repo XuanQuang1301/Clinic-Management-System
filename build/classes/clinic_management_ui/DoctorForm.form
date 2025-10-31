@@ -57,9 +57,9 @@
                   <Component id="jPanel2" min="-2" pref="261" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="486" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="btnSearchDoctor" min="-2" pref="94" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                       </Group>
@@ -92,7 +92,7 @@
                                   <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="55" pref="61" max="32767" attributes="0"/>
+                          <EmptySpace min="55" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
@@ -106,9 +106,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="btnSearchDoctor" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="btnSearchDoctor" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -126,10 +126,10 @@
                       <Component id="btnUpdateDoctor" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnAddDoctor" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="34" max="32767" attributes="0"/>
+                  <EmptySpace pref="27" max="32767" attributes="0"/>
                   <Component id="jScrollPane2" min="-2" pref="349" max="-2" attributes="0"/>
               </Group>
-              <Component id="jPanel2" pref="547" max="32767" attributes="0"/>
+              <Component id="jPanel2" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -347,9 +347,8 @@
               <Font name="Segoe UI" size="14" style="0"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="2">
-                <StringItem index="0" value="T&#xea;n b&#xe1;c s&#x129;"/>
-                <StringItem index="1" value=" "/>
+              <StringArray count="1">
+                <StringItem index="0" value="Doctor Name"/>
               </StringArray>
             </Property>
           </Properties>
@@ -403,12 +402,12 @@
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="7" rowCount="4">
                     <Column editable="true" title="ID" type="java.lang.Object"/>
-                    <Column editable="true" title="H&#x1ecd; v&#xe0; t&#xea;n" type="java.lang.Object"/>
+                    <Column editable="true" title="Doctor Name" type="java.lang.Object"/>
                     <Column editable="true" title="Email" type="java.lang.Object"/>
-                    <Column editable="true" title="Gi&#x1edb;i t&#xed;nh" type="java.lang.Object"/>
-                    <Column editable="true" title="Ng&#xe0;y sinh" type="java.lang.Object"/>
-                    <Column editable="true" title="S&#x1ed1; &#x111;i&#x1ec7;n tho&#x1ea1;i" type="java.lang.Object"/>
-                    <Column editable="true" title="Chuy&#xea;n khoa" type="java.lang.Object"/>
+                    <Column editable="true" title="Gender" type="java.lang.Object"/>
+                    <Column editable="true" title="Birthday" type="java.lang.Object"/>
+                    <Column editable="true" title="Phone Number" type="java.lang.Object"/>
+                    <Column editable="true" title="Specialty" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
