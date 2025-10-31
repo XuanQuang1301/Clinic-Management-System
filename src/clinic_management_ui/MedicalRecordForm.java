@@ -50,6 +50,7 @@ public class MedicalRecordForm extends JFrame {
     private JTextArea txtInstructions;
     private JButton btnAddOrUpdate, btnNew, btnDeletePrescription;
     private JPanel navPanel;
+    private final Color buttonColor = new Color(250, 210, 210); 
 
     public MedicalRecordForm() {
         super("Clinic Management - Medical Records");
@@ -100,6 +101,11 @@ public class MedicalRecordForm extends JFrame {
         btnSearch = new JButton("Search");
         btnEditRecord = new JButton("Edit Selected Record");
         btnDeleteRecord = new JButton("Delete Selected Record");
+        
+        btnSearch.setBackground(buttonColor);
+        btnEditRecord.setBackground(buttonColor);
+        btnDeleteRecord.setBackground(buttonColor);
+
         buttonsPanel.add(btnSearch);
         buttonsPanel.add(btnEditRecord);
         buttonsPanel.add(btnDeleteRecord);
@@ -149,6 +155,10 @@ public class MedicalRecordForm extends JFrame {
         btnAddOrUpdate = new JButton("Add / Update");
         btnNew = new JButton("New");
         btnDeletePrescription = new JButton("Delete");
+
+        btnAddOrUpdate.setBackground(buttonColor);
+        btnNew.setBackground(buttonColor);
+        btnDeletePrescription.setBackground(buttonColor);
 
         buttonPanel.add(btnAddOrUpdate);
         buttonPanel.add(btnNew);
