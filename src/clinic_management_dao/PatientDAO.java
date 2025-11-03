@@ -10,9 +10,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 public class PatientDAO {
-
+    private Connection conn;
     public PatientDAO(Connection conn) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.conn = conn; 
+        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     private LocalDate parseDate(String dobStr, int patientId) {
