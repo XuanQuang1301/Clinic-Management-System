@@ -100,6 +100,11 @@ public class AppointmentForm extends javax.swing.JFrame {
         btnSearchAppointments.setBackground(new java.awt.Color(255, 204, 204));
         btnSearchAppointments.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btnSearchAppointments.setText("Search ");
+        btnSearchAppointments.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchAppointmentsActionPerformed(evt);
+            }
+        });
 
         btnAddAppointment.setBackground(new java.awt.Color(255, 204, 204));
         btnAddAppointment.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
@@ -243,7 +248,7 @@ public class AppointmentForm extends javax.swing.JFrame {
                             .addComponent(jButton10)
                             .addComponent(jButton11)
                             .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton10, jButton11, jButton5, jButton6, jButton7, jButton8});
@@ -453,6 +458,44 @@ public class AppointmentForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnDeleteAppointmentActionPerformed
+
+    private void btnSearchAppointmentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchAppointmentsActionPerformed
+        // TODO add your handling code here:
+        String patientName = jTextField1.getText().trim();
+        String doctorName = jTextField5.getText().trim();
+        String room = jTextField4.getText().trim();
+
+        AppointmentDAO dao = new AppointmentDAO(conn);
+        List<AppointmentDisplay> appointmentList = dao.getAllWithNames(); // lấy tất cả trước
+
+        // Lọc theo điều kiện tìm kiếm (có thể dùng Stream)
+        List<AppointmentDisplay> filtered = new ArrayList<>();
+        for (AppointmentDisplay a : appointmentList) {
+            boolean match = true;
+            if (!patientName.isEmpty() && !a.getPatientName().toLowerCase().contains(patientName.toLowerCase()))
+                match = false;
+            if (!doctorName.isEmpty() && !a.getDoctorName().toLowerCase().contains(doctorName.toLowerCase()))
+                match = false;
+            if (!room.isEmpty() && !a.getRoomNumber().toLowerCase().contains(room.toLowerCase()))
+                match = false;
+            if (match) filtered.add(a);
+        }
+
+        // Cập nhật lại bảng hiển thị
+        DefaultTableModel model = (DefaultTableModel) tblAppointments.getModel();
+        model.setRowCount(0);
+        for (AppointmentDisplay appointment : filtered) {
+            model.addRow(new Object[]{
+                appointment.getAppointmentId(),
+                appointment.getPatientName(),
+                appointment.getDoctorName(),
+                appointment.getAppointmentDate(),
+                appointment.getReason(),
+                appointment.getStatus(),
+                appointment.getRoomNumber()
+            });
+        }
+    }//GEN-LAST:event_btnSearchAppointmentsActionPerformed
   
     /**
      * @param args the command line arguments
