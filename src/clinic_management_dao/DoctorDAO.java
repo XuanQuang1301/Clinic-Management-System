@@ -87,48 +87,60 @@
                                                                 return false;
                                                             }      
                                                         }
-                                                        public List<Doctor> searchDoctor(String searchTerm, String searchBy) {
-                                                            List<Doctor> doctorList = new ArrayList<>();
-                                                            String sql = "SELECT d.*, dp.department_name FROM doctors d JOIN departments dp ON d.department_id = dp.department_id WHERE ";
-                                                            switch(searchBy)
-                                                            {
-                                                                case "Tên bác sĩ":
-                                                                    sql+= " d.full_name LIKE ?";
-                                                                    break;
-                                                                case "Khoa":
-                                                                    sql+=" dp.department_name LIKE ?";
-                                                                    break;
-                                                                default:
-                                                                    return doctorList;
-                                                            }
-                                                            try (Connection conn = Connect.ConnectDB(); 
-                                                            PreparedStatement ps = conn.prepareStatement(sql)) {
+    public List<Doctor> searchDoctor(String searchTerm) {
+    List<Doctor> doctorList = new ArrayList<>();
 
-                                                                ps.setString(1, "%" + searchTerm+ "%");
-                                                                try (ResultSet rs = ps.executeQuery()) {
-                                                                    while (rs.next()) {
-                                                                        Doctor doctor = new Doctor();
-                                                                        doctor.setDoctorId(rs.getInt("doctor_id"));
-                                                                        doctor.setFullName(rs.getString("full_name"));
-                                                                        doctor.setEmail(rs.getString("email"));
-                                                                        if (rs.getString("gender") != null) {
-                                                                            doctor.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
-                                                                        }
-                                                                        java.sql.Date dobSql = rs.getDate("date_of_birth");
-                                                                        if (dobSql != null) {
-                                                                            doctor.setDateOfBirth(dobSql.toLocalDate());
-                                                                        }
-                                                                        doctor.setPhoneNumber(rs.getString("phone_number"));
-                                                                        doctor.setSpecialization(rs.getString("specialization"));
-                                                                        doctor.setDepartmentId(rs.getInt("department_id"));
-                                                                        doctorList.add(doctor);
-                                                                    }
-                                                                }
-                                                            } catch (SQLException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            return doctorList;
-                                                        }
+    if (searchTerm == null || searchTerm.trim().isEmpty()) {
+        return doctorList; 
+    }
+
+    String sql = """
+        SELECT d.*
+        FROM doctors d
+        JOIN departments dp ON d.department_id = dp.department_id
+        WHERE d.full_name LIKE ?
+        ORDER BY d.full_name
+    """;
+
+    try (Connection conn = Connect.ConnectDB();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        String searchPattern = "%" + searchTerm.trim() + "%";
+        ps.setString(1, searchPattern);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Doctor doctor = new Doctor();
+                doctor.setDoctorId(rs.getInt("doctor_id"));
+                doctor.setFullName(rs.getString("full_name"));
+                doctor.setEmail(rs.getString("email"));
+
+                String genderStr = rs.getString("gender");
+                if (genderStr != null) {
+                    doctor.setGender(Gender.valueOf(genderStr.toUpperCase()));
+                }
+
+                java.sql.Date dobSql = rs.getDate("date_of_birth");
+                if (dobSql != null) {
+                    doctor.setDateOfBirth(dobSql.toLocalDate());
+                }
+
+                doctor.setPhoneNumber(rs.getString("phone_number"));
+                doctor.setSpecialization(rs.getString("specialization"));
+                doctor.setDepartmentId(rs.getInt("department_id"));
+
+                doctorList.add(doctor);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return doctorList;
+}
+
+
+
                                                         public Doctor getDoctorById(int doctorId) throws SQLException
                                                         {
                                                             String sql = "SELECT * FROM doctors WHERE doctor_id = ?";
