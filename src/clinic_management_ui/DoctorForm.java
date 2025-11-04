@@ -9,6 +9,7 @@ import clinic_management_dao.Doctor;
 import clinic_management_dao.DoctorDAO;
 import static java.lang.reflect.Array.set;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -34,14 +35,18 @@ public class DoctorForm extends javax.swing.JFrame {
     public void loadDoctorsToTable() {
         List<Doctor> doctorList = DoctorDAO.getAllDoctors();
         DefaultTableModel model = (DefaultTableModel) tblDoctors.getModel();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         model.setRowCount(0);
         for (Doctor doctor : doctorList) {
+            String formattedDate = doctor.getDateOfBirth() != null
+            ? doctor.getDateOfBirth().format(formatter)
+            : "";
             model.addRow(new Object[]{
                 doctor.getDoctorId(),
                 doctor.getFullName(),
                 doctor.getEmail(),
                 doctor.getGender(),
-                doctor.getDateOfBirth(),
+                formattedDate,
                 doctor.getPhoneNumber(),
                 doctor.getSpecialization(),});
         }
@@ -323,17 +328,22 @@ public class DoctorForm extends javax.swing.JFrame {
        
     private void populateDoctorTable(List<Doctor> doctorList) {
         DefaultTableModel model = (DefaultTableModel) tblDoctors.getModel();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
         model.setRowCount(0);
         for (Doctor doctor : doctorList) {
+            String formattedDate = doctor.getDateOfBirth() != null
+        ? doctor.getDateOfBirth().format(formatter)
+        : "";
             Object[] row = new Object[]{
                 doctor.getDoctorId(),
                 doctor.getFullName(),
                 doctor.getEmail(),
                 doctor.getGender(),
-                doctor.getDateOfBirth(),
+                formattedDate,
                 doctor.getPhoneNumber(),
-                doctor.getSpecialization(),
-                doctor.getDepartmentId(),};
+                doctor.getSpecialization()};
+              //  doctor.getDepartmentId(),};
             model.addRow(row);
         }
     }

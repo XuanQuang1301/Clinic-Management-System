@@ -54,7 +54,7 @@
                                   <Group type="102" attributes="0">
                                       <Component id="Birthday" min="-2" pref="77" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
-                                      <Component id="txtEmail" linkSize="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtBirthday" linkSize="1" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -63,7 +63,7 @@
                                       </Group>
                                       <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="txtBirthday" linkSize="1" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtEmail" linkSize="1" min="-2" max="-2" attributes="0"/>
                                           <Component id="jComboBox1" linkSize="1" min="-2" pref="109" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -101,7 +101,7 @@
               </Group>
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txtEmail" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtBirthday" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="Birthday" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
@@ -111,7 +111,7 @@
               </Group>
               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txtBirthday" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtEmail" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="Email" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
@@ -179,14 +179,14 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtEmail">
+    <Component class="javax.swing.JTextField" name="txtBirthday">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtEmailActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtBirthdayActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtPhoneNumber">
@@ -249,14 +249,14 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtBirthday">
+    <Component class="javax.swing.JTextField" name="txtEmail">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtBirthdayActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtEmailActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="jComboBox1">
