@@ -158,15 +158,15 @@ public class PatientDAO {
         return false;
     }
 
-    public List<Patient> searchPatient(String id, String name, String insurance, String gender, String blood) {
+    public List<Patient> searchPatient(String name, String insurance, String gender) {
         List<Patient> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM patients WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
-        if (id != null && !id.isEmpty()) {
-            sql.append(" AND CAST(patient_id AS CHAR) LIKE ?");
-            params.add("%" + id + "%");
-        }
+//        if (id != null && !id.isEmpty()) {
+//            sql.append(" AND CAST(patient_id AS CHAR) LIKE ?");
+//            params.add("%" + id + "%");
+//        }
         if (name != null && !name.isEmpty()) {
             sql.append(" AND full_name LIKE ?");
             params.add("%" + name + "%");
@@ -179,10 +179,10 @@ public class PatientDAO {
             sql.append(" AND gender = ?");
             params.add(gender);
         }
-        if (blood != null && !blood.isEmpty()) {
-            sql.append(" AND blood_group = ?");
-            params.add(blood);
-        }
+//        if (blood != null && !blood.isEmpty()) {
+//            sql.append(" AND blood_group = ?");
+//            params.add(blood);
+//        }
 
         try (Connection con = Connect.ConnectDB();
              PreparedStatement pst = con.prepareStatement(sql.toString())) {
