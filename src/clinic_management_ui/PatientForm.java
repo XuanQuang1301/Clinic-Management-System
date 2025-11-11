@@ -17,7 +17,6 @@ public class PatientForm extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Khi form hiển thị xong, tự động tải dữ liệu
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowOpened(java.awt.event.WindowEvent e) {
@@ -307,37 +306,30 @@ public class PatientForm extends javax.swing.JFrame {
 
     private void Get_Data() {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0); // Xóa dữ liệu cũ trước khi tải
+    model.setRowCount(0); 
 
     try {
         List<Patient> list = patientDAO.getAllPatients();
 
         if (list.isEmpty()) {
             System.out.println("Không tìm thấy dữ liệu bệnh nhân nào.");
-            return; // Dừng lại nếu list rỗng
+            return; 
         }
 
-        // --- BẮT ĐẦU SỬA ---
-        // 1. Tạo bộ định dạng ngày (Hãy đảm bảo đã import java.time.format.DateTimeFormatter)
         java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        // --- KẾT THÚC SỬA ---
 
         for (Patient p : list) {
 
-            // --- BẮT ĐẦU SỬA ---
-            // 2. Định dạng ngày sinh
-            String formattedDob = ""; // Mặc định là rỗng
+            String formattedDob = ""; 
             if (p.getDateOfBirth() != null) {
                 formattedDob = p.getDateOfBirth().format(formatter); // Chuyển sang "dd/MM/yyyy"
             }
-            // --- KẾT THÚC SỬA ---
-
             model.addRow(new Object[]{
                 p.getId(),
                 p.getFullName(),
                 p.getGender(),
                 p.getPhoneNumber(),
-                formattedDob, // 3. SỬA: Dùng chuỗi ngày đã định dạng
+                formattedDob, 
                 p.getAddress(),
                 p.getBloodGroup(), 
                 p.getEmail(),
@@ -345,14 +337,11 @@ public class PatientForm extends javax.swing.JFrame {
             });
         }
     } catch (Exception ex) {
-        // ĐÂY LÀ PHẦN QUAN TRỌNG NHẤT
-        // Hiển thị lỗi chi tiết trong một cửa sổ popup
         JOptionPane.showMessageDialog(this,
                 "Đã xảy ra lỗi khi tải dữ liệu bệnh nhân: " + ex.getMessage(),
                 "Lỗi Database",
                 JOptionPane.ERROR_MESSAGE);
 
-        // In lỗi chi tiết ra console để debug
         ex.printStackTrace();
     }
 }
@@ -391,9 +380,9 @@ public class PatientForm extends javax.swing.JFrame {
     private String getStringFromCell(int row, int col) {
         Object val = jTable1.getValueAt(row, col);
         if (val == null) {
-            return null; // Trả về null nếu ô bị trống
+            return null; 
         }
-        return val.toString(); // Trả về chuỗi nếu ô có dữ liệu
+        return val.toString();
     }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
             int row = jTable1.getSelectedRow();
@@ -403,10 +392,8 @@ public class PatientForm extends javax.swing.JFrame {
     }
 
     try {
-        // Lấy ID (cột 0), giả định không bao giờ null
         int id = Integer.parseInt(jTable1.getValueAt(row, 0).toString());
 
-        // Lấy các giá trị khác một cách an toàn
         String fullName = getStringFromCell(row, 1);
         String gender = getStringFromCell(row, 2);
         String phone = getStringFromCell(row, 3);
@@ -414,19 +401,16 @@ public class PatientForm extends javax.swing.JFrame {
         String email = getStringFromCell(row, 7);
         String insurance = getStringFromCell(row, 8);
 
-        // Lấy ngày sinh (cột 4)
         LocalDate dob = null;
         Object dobObj = jTable1.getValueAt(row, 4);
         if (dobObj != null) {
             try {
-                // Thử parse, chấp nhận cả hai định dạng
                 String dobStr = dobObj.toString();
                 if (dobStr.contains("-")) {
                     dob = LocalDate.parse(dobStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 } else if (dobStr.contains("/")) {
                     dob = LocalDate.parse(dobStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 } else {
-                     // Thêm một kiểu nếu cần, ví dụ: dd-MM-yyyy
                      dob = LocalDate.parse(dobStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                 }
             } catch (Exception ex_date) {
@@ -437,7 +421,6 @@ public class PatientForm extends javax.swing.JFrame {
             }
         }
 
-        // Lấy nhóm máu (cột 6)
         BloodGroup bg = null;
         String bloodGroupStr = getStringFromCell(row, 6);
         if (bloodGroupStr != null && !bloodGroupStr.isEmpty()) {
@@ -448,7 +431,6 @@ public class PatientForm extends javax.swing.JFrame {
             }
         }
 
-        // Tạo đối tượng Patient
         Patient p = new Patient(
                 id,
                 fullName,
@@ -461,16 +443,14 @@ public class PatientForm extends javax.swing.JFrame {
                 insurance
         );
 
-        // Gọi DAO để cập nhật
         if (patientDAO.updatePatient(p)) {
             JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
-            Get_Data(); // Tải lại dữ liệu
+            Get_Data();
         } else {
             JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
         }
 
     } catch (Exception ex) {
-        // Bắt các lỗi khác, ví dụ lỗi ép kiểu ID
         JOptionPane.showMessageDialog(this,
                 "Đã xảy ra lỗi khi đọc dữ liệu từ bảng: " + ex.getMessage(),
                 "Lỗi", JOptionPane.ERROR_MESSAGE);

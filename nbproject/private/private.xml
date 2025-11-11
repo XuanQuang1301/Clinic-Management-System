@@ -3,25 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic/management/system/ClinicManagementSystem.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_utils/PasswordHasher.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/AddAppointment.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/DoctorForm.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/ScheduleForm.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/MedicalRecordForm.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/RoomForm.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/PatientForm.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/DepartmentForm.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/DashboardForm.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/Connect.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/ChangePasswordDialog.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/BillForm.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_ui/AppointmentForm.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_dao/DoctorDAO.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_dao/Appointment.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_dao/AppointmentDAO.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_dao/AppointmentDisplay.java</file>
-            <file>file:/D:/btl%20csdl/Clinic-Management-System/src/clinic_management_dao/BillDAO.java</file>
+            <file>file:/D:/Apache%20NetBeans/Clinic-Management-System/src/clinic_management_ui/LoginForm.java</file>
+            <file>file:/D:/Apache%20NetBeans/Clinic-Management-System/src/clinic_management_ui/PatientForm.java</file>
+            <file>file:/D:/Apache%20NetBeans/Clinic-Management-System/src/clinic_management_ui/DepartmentForm.java</file>
+            <file>file:/D:/Apache%20NetBeans/Clinic-Management-System/src/clinic_management_ui/AppointmentForm.java</file>
+            <file>file:/D:/Apache%20NetBeans/Clinic-Management-System/src/clinic_management_dao/PatientDAO.java</file>
         </group>
     </open-files>
 </project-private>
