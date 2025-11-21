@@ -303,7 +303,6 @@ public class PatientForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-
     private void Get_Data() {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.setRowCount(0); 
@@ -384,87 +383,60 @@ public class PatientForm extends javax.swing.JFrame {
         }
         return val.toString();
     }
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-            int row = jTable1.getSelectedRow();
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn bệnh nhân cần cập nhật.");
-        return;
-    }
-
-    try {
-        int id = Integer.parseInt(jTable1.getValueAt(row, 0).toString());
-
-        String fullName = getStringFromCell(row, 1);
-        String gender = getStringFromCell(row, 2);
-        String phone = getStringFromCell(row, 3);
-        String address = getStringFromCell(row, 5);
-        String email = getStringFromCell(row, 7);
-        String insurance = getStringFromCell(row, 8);
-
-        LocalDate dob = null;
-        Object dobObj = jTable1.getValueAt(row, 4);
-        if (dobObj != null) {
+        int selectedRow = jTable1.getSelectedRow();
+    
+        if (jTable1.isEditing()) {
             try {
-                String dobStr = dobObj.toString();
-                if (dobStr.contains("-")) {
-                    dob = LocalDate.parse(dobStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                } else if (dobStr.contains("/")) {
-                    dob = LocalDate.parse(dobStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                } else {
-                     dob = LocalDate.parse(dobStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                }
-            } catch (Exception ex_date) {
-                JOptionPane.showMessageDialog(this,
-                    "Ngày sinh trên bảng không hợp lệ: '" + dobObj.toString() + "'.\nKhông thể cập nhật.",
-                    "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
-                return;
+                jTable1.getCellEditor().stopCellEditing();
+            } catch (Exception e) {
+            
             }
         }
 
-        BloodGroup bg = null;
-        String bloodGroupStr = getStringFromCell(row, 6);
-        if (bloodGroupStr != null && !bloodGroupStr.isEmpty()) {
-            try {
-                bg = BloodGroup.valueOf(bloodGroupStr.trim().toUpperCase());
-            } catch (Exception ex_bg) {
-                System.err.println("Giá trị blood_group trên bảng không hợp lệ: " + bloodGroupStr);
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một bệnh nhân để cập nhật.", 
+                                          "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        try {
+            int patientId = Integer.parseInt(jTable1.getValueAt(selectedRow, 0).toString());
+
+            PatientDAO patientDAO = new PatientDAO(); 
+            Patient patientToUpdate = patientDAO.getPatientById(patientId); 
+
+            if (patientToUpdate != null) {
+                AddPatient updatePatientDialog = new AddPatient(); 
+
+                updatePatientDialog.setPatientForUpdate(patientToUpdate); 
+
+                updatePatientDialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent e) {
+                        Get_Data(); 
+                    }
+                });
+
+                updatePatientDialog.setVisible(true);
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin bệnh nhân", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi tải dữ liệu: " + e.getMessage(), 
+                                          "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-
-        Patient p = new Patient(
-                id,
-                fullName,
-                gender,
-                phone,
-                dob, 
-                address,
-                bg,
-                email,
-                insurance
-        );
-
-        if (patientDAO.updatePatient(p)) {
-            JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
-            Get_Data();
-        } else {
-            JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
-        }
-
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this,
-                "Đã xảy ra lỗi khi đọc dữ liệu từ bảng: " + ex.getMessage(),
-                "Lỗi", JOptionPane.ERROR_MESSAGE);
-        ex.printStackTrace();
-    }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     // tim kiem
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-//        String id = jTextField1.getText().trim();
+
         String name = jTextField2.getText().trim();
         String insurance = jTextField3.getText().trim();
         String gender = jTextField4.getText().trim();
-//        String blood = jTextField5.getText().trim();
 
         if (name.isEmpty() && insurance.isEmpty() && gender.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập ít nhất một điều kiện tìm kiếm.");

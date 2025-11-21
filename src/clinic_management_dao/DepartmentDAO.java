@@ -1,14 +1,16 @@
 package clinic_management_dao;
 
-import clinic_management_ui.Connect;  
+import clinic_management_ui.Connect;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentDAO {
+    
     public DepartmentDAO(){
         
     }
+    
     public boolean add(Department department) {
         String sql = "INSERT INTO departments (department_name, description, consultation_fee) VALUES (?, ?, ?)";
         try (Connection conn = Connect.ConnectDB(); 
@@ -29,7 +31,7 @@ public class DepartmentDAO {
         List<Department> departmentList = new ArrayList<>();
         String sql = "SELECT department_id, department_name, description, consultation_fee FROM departments";
 
-        try (Connection conn = Connect.ConnectDB();   
+        try (Connection conn = Connect.ConnectDB();    
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -43,6 +45,7 @@ public class DepartmentDAO {
             }
 
         } catch (SQLException e) {
+
         }
         return departmentList;
     }
@@ -57,23 +60,28 @@ public class DepartmentDAO {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
+
             return false;
         }
     }
     
-    public boolean updatePDepartment(Department p) {
+    public boolean updateDepartment(Department dept) { 
         String sql = "UPDATE departments SET department_name=?, description=?, consultation_fee=? WHERE department_id=?";
         try (Connection con = Connect.ConnectDB();
              PreparedStatement pst = con.prepareStatement(sql)) {
             
-            pst.setInt(1, p.getDepartmentId());
-            pst.setString(2, p.getDepartmentName());
-            pst.setString(3, p.getDescription());
-            pst.setBigDecimal(4, p.getConsultationFee());
-            
+            // 1. department_name
+            pst.setString(1, dept.getDepartmentName()); 
+            // 2. description
+            pst.setString(2, dept.getDescription());
+            // 3. consultation_fee
+            pst.setBigDecimal(3, dept.getConsultationFee());
+            // 4. WHERE department_id
+            pst.setInt(4, dept.getDepartmentId()); // Đảm bảo ID được đặt ở vị trí cuối
 
             return pst.executeUpdate() > 0;
         } catch (SQLException e) {
+             // e.printStackTrace(); 
         }
         return false;
     }
@@ -90,7 +98,7 @@ public class DepartmentDAO {
             sql.append(" AND department_name LIKE ?");
         }
         if (fee != null && !fee.trim().isEmpty()) {
-            sql.append(" AND consultation_fee LIKE ?");
+            sql.append(" AND consultation_fee LIKE ?"); // Sử dụng LIKE để tìm kiếm chuỗi trong fee
         }
 
         try (Connection conn = Connect.ConnectDB();
@@ -120,9 +128,13 @@ public class DepartmentDAO {
             }
 
         } catch (SQLException e) {
+            // e.printStackTrace(); 
+        } catch (NumberFormatException e) {
+             // e.printStackTrace(); // Xử lý nếu ID không phải là số
         }
         return departmentList;
     }
+
     public Department getDepartmentById(int departmentId) {
         String sql = "SELECT department_id, department_name, description, consultation_fee FROM departments WHERE department_id = ?";
         Department department = null;
@@ -148,6 +160,7 @@ public class DepartmentDAO {
 
         return department;
     }
+
     public List<Department> searchByName(String name) {
         List<Department> departmentList = new ArrayList<>();
         String sql = "SELECT department_id, department_name, description, consultation_fee FROM departments WHERE department_name LIKE ?";

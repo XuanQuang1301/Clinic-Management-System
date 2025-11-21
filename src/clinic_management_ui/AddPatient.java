@@ -14,11 +14,13 @@ import javax.swing.JOptionPane;
 
 
 public class AddPatient extends javax.swing.JFrame {
+    private Patient currentPatient = null; 
+    private final PatientDAO patientDAO = new PatientDAO();
+    private static final DateTimeFormatter UI_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
     public AddPatient() {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-
     }
     
     private void Reset() {
@@ -30,8 +32,37 @@ public class AddPatient extends javax.swing.JFrame {
         txtInsurance.setText("");
         cmbBloodGroup.setSelectedIndex(-1); 
         cmbGender.setSelectedIndex(-1);
-        btnSave.setEnabled(true); // cho phép lưu lại lần nữa
+        btnSave.setEnabled(true);
 }
+    
+    public void setPatientForUpdate(Patient patientToUpdate) {
+        this.currentPatient = patientToUpdate;
+        this.setTitle("Cập nhật bệnh nhân ID: " + patientToUpdate.getId());
+        loadPatientData(patientToUpdate); 
+    }
+
+    private void loadPatientData(Patient p) {
+        txtFullname.setText(p.getFullName());
+        txtAddress.setText(p.getAddress());
+        txtContactNo.setText(p.getPhoneNumber());
+        txtEmail.setText(p.getEmail());
+        txtInsurance.setText(p.getInsuranceNumber());
+
+        if (p.getDateOfBirth() != null) {
+             txtBirthday.setText(p.getDateOfBirth().format(UI_DATE_FORMATTER)); 
+        } else {
+             txtBirthday.setText("");
+        }
+
+        String genderStr = p.getGender();
+        if (genderStr != null) {
+             cmbGender.setSelectedItem(genderStr);
+        }
+
+        if (p.getBloodGroup() != null) {
+            cmbBloodGroup.setSelectedItem(p.getBloodGroup().name()); 
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -244,11 +275,10 @@ public class AddPatient extends javax.swing.JFrame {
 
     private void txtInsuranceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInsuranceKeyTyped
         char c = evt.getKeyChar();
-        // chi nhan 11 so
         if (txtInsurance.getText().length() >= 11 &&
             Character.isDigit(c)) {
             getToolkit().beep();
-            evt.consume(); // Không cho nhập thêm
+            evt.consume(); 
             return;
         }
         if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE)) {
@@ -283,54 +313,53 @@ public class AddPatient extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         String fullname = txtFullname.getText().trim();
-        String gender = cmbGender.getSelectedItem() != null ? cmbGender.getSelectedItem().toString() : "";
+        String gender = cmbGender.getSelectedItem() != null ? cmbGender.getSelectedItem().toString() : null;
         String birthday = txtBirthday.getText().trim();
         String address = txtAddress.getText().trim();
         String contact = txtContactNo.getText().trim();
-        String blood = cmbBloodGroup.getSelectedItem() != null ? cmbBloodGroup.getSelectedItem().toString() : "";
+        String blood = cmbBloodGroup.getSelectedItem() != null ? cmbBloodGroup.getSelectedItem().toString() : null;
         String insurance = txtInsurance.getText().trim();
-
-        // 2. Lấy và kiểm tra Email (code của bạn đã tốt)
         String email = txtEmail.getText().trim().toLowerCase();
+
+        // 1. Kiểm tra Email
         String regex = "^[a-z0-9._]+@gmail\\.com$";
         if (!email.matches(regex)) {
-            JOptionPane.showMessageDialog(this, "Invalid email address format.");
+            JOptionPane.showMessageDialog(this, "Invalid email address format (@gmail.com required).");
             return;
         }
 
-        // 3. Xử lý & chuyển đổi dữ liệu
+        // 2. Chuyển đổi Ngày sinh
         LocalDate dob = null;
-        BloodGroup bg = null;
-
-        // Chuyển đổi Ngày sinh (birthday string -> LocalDate)
         if (!birthday.isEmpty()) {
             try {
-                // Logic này chấp nhận cả dd/MM/yyyy và dd-MM-yyyy
                 String normalizedStr = birthday.replace('/', '-');
-                java.time.format.DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 dob = LocalDate.parse(normalizedStr, formatter);
             } catch (DateTimeParseException e) {
                 JOptionPane.showMessageDialog(this, "Invalid birthday format. Please use dd/MM/yyyy.");
-                return; // Dừng lại nếu ngày sai
+                return;
             }
         }
 
-        // Chuyển đổi Nhóm máu (blood string -> BloodGroup enum)
-        if (!blood.isEmpty()) {
+        // 3. Chuyển đổi Nhóm máu
+        BloodGroup bg = null;
+        if (blood != null && !blood.isEmpty()) {
             try {
                 bg = BloodGroup.valueOf(blood.trim().toUpperCase());
             } catch (IllegalArgumentException e_bg) {
                 JOptionPane.showMessageDialog(this, "Invalid blood group value: " + blood);
-                return; // Dừng lại nếu nhóm máu sai
+                return;
             }
         }
 
-        // 4. Tạo đối tượng Patient
-        Patient newPatient = new Patient(
-            0, // ID là 0, database sẽ tự động tăng
+        // 4. Tạo đối tượng Patient (Xác định ID)
+        int id = (currentPatient != null) ? currentPatient.getId() : 0; // Lấy ID cũ nếu là Update
+
+        Patient finalPatient = new Patient(
+            id, 
             fullname,
             gender,
-            contact, // Đảm bảo thứ tự này khớp với constructor của Patient
+            contact, 
             dob,
             address,
             bg,
@@ -338,20 +367,24 @@ public class AddPatient extends javax.swing.JFrame {
             insurance
         );
 
-        // 5. Gọi hàm DAO đã được tối ưu
-        PatientDAO dao = new PatientDAO();
-        boolean success = dao.insertPatient(newPatient); // <<-- LỖI ĐÃ ĐƯỢC SỬA
+        // 5. GỌI DAO: PHÂN BIỆT INSERT và UPDATE
+        boolean success = false;
+        String actionType = (currentPatient == null) ? "add" : "update";
 
-        // 6. Xử lý kết quả (code của bạn đã tốt)
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Patient saved successfully!");
-            btnSave.setEnabled(false);
-
-            // Cân nhắc: Thêm dòng này để form chính tự cập nhật
-            // patientForm.Get_Data(); // (Nếu bạn có tham chiếu đến form chính)
+        if (currentPatient == null) {
+            success = patientDAO.insertPatient(finalPatient); 
         } else {
-            JOptionPane.showMessageDialog(this, "Error saving patient!");
+            success = patientDAO.updatePatient(finalPatient); 
         }
+
+        // 6. Xử lý kết quả
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Patient " + actionType + " successfully!");
+            btnSave.setEnabled(false);
+        } else {
+            JOptionPane.showMessageDialog(this, "Error " + actionType + " patient!");
+        }
+        
         this.dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 

@@ -10,10 +10,32 @@ import javax.swing.JFrame;
 
 public class AddDepartment extends javax.swing.JDialog {
     
+    private Department currentDepartment = null; 
+    private final DepartmentDAO departmentDAO = new DepartmentDAO(); 
+
     public AddDepartment(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+        this.setTitle("Thêm Khoa mới");
+    }
+
+    public AddDepartment(java.awt.Frame parent, boolean modal, Department departmentToUpdate) {
+        super(parent, modal);
+        initComponents();
+        this.currentDepartment = departmentToUpdate; 
+        this.setTitle("Cập nhật Khoa ID: " + departmentToUpdate.getDepartmentId());
+        loadDepartmentData(departmentToUpdate); 
+    }
+
+    private void loadDepartmentData(Department dept) {
+        txtDescription.setText(dept.getDescription());
+        txtConsultationFee.setText(dept.getConsultationFee().toString());
+        
+        if (dept.getDepartmentName() != null) {
+            jComboBox1.setSelectedItem(dept.getDepartmentName());
+        }
+        
+        btnSave.setText("Cập nhật");
     }
 
 
@@ -173,29 +195,49 @@ public class AddDepartment extends javax.swing.JDialog {
         String departmentName = jComboBox1.getSelectedItem().toString().trim();
         String description = txtDescription.getText().trim();
         String consultationFee = txtConsultationFee.getText().trim();
-        if(departmentName.isEmpty() || description.isEmpty() || consultationFee.isEmpty())
-        {
+
+        if(departmentName.isEmpty() || description.isEmpty() || consultationFee.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ các trường.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        BigDecimal fee = new BigDecimal(consultationFee);
-        try 
-        {
-            Department newDepartment = new Department();
-            newDepartment.setDepartmentName(departmentName);
-            newDepartment.setDescription(description);
-            newDepartment.setConsultationFee(fee);
+
+        BigDecimal fee;
+        try {
+            fee = new BigDecimal(consultationFee);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Phí khám không hợp lệ.", "Lỗi Định dạng", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            Department department = new Department();
+            department.setDepartmentName(departmentName);
+            department.setDescription(description);
+            department.setConsultationFee(fee);
+
             DepartmentDAO dao = new DepartmentDAO();
-            boolean success = dao.add(newDepartment);
+            boolean success;
+            String actionType; 
+
+            if (this.currentDepartment == null) {
+                success = dao.add(department); 
+                actionType = "Lưu khoa mới";
+            } else {
+                department.setDepartmentId(currentDepartment.getDepartmentId()); 
+                success = dao.updateDepartment(department); 
+                actionType = "Cập nhật khoa";
+            }
+
+            // 3. Xử lý kết quả
             if (success) {
-                JOptionPane.showMessageDialog(this, "Lưu khoa mới thành công!");
+                JOptionPane.showMessageDialog(this, actionType + " thành công!");
                 this.dispose(); 
             } else {
-                JOptionPane.showMessageDialog(this, "Lưu khoa mới thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, actionType + " thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
-        catch(HeadlessException e)
-        {
+        catch(HeadlessException e) {
+            e.printStackTrace();
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 

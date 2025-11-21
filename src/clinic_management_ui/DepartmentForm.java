@@ -2,6 +2,10 @@ package clinic_management_ui;
 
 import clinic_management_dao.DepartmentDAO;
 import clinic_management_dao.Department;
+import clinic_management_dao.Doctor;
+import clinic_management_dao.DoctorDAO;
+import clinic_management_dao.Patient;
+import clinic_management_dao.PatientDAO;
 import java.awt.HeadlessException;
 import java.util.List;
 import javax.swing.JFrame;
@@ -72,6 +76,11 @@ public class DepartmentForm extends javax.swing.JFrame {
         jButton1.setBackground(new java.awt.Color(255, 204, 204));
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jButton1.setText("Update");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btnDeleteDepartment.setBackground(new java.awt.Color(255, 204, 204));
         btnDeleteDepartment.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -434,6 +443,52 @@ public class DepartmentForm extends javax.swing.JFrame {
         BillForm billForm = new BillForm();
         billForm.setVisible(true);
     }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int selectedRow = tblDepartments.getSelectedRow(); 
+        if (tblDepartments.isEditing()) {
+            try {
+                tblDepartments.getCellEditor().stopCellEditing();
+            } catch (Exception e) {
+            }
+        }
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một khoa để cập nhật.", 
+                                          "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        try {
+            Object idValue = tblDepartments.getValueAt(selectedRow, 0);
+            int departmentId = Integer.parseInt(idValue.toString());
+
+            DepartmentDAO departmentDAO = new DepartmentDAO(); 
+            Department departmentToUpdate = departmentDAO.getDepartmentById(departmentId); 
+
+            if (departmentToUpdate != null) {
+                AddDepartment updateDepartmentDialog = new AddDepartment(this, true, departmentToUpdate);
+
+                updateDepartmentDialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent e) {
+                        Get_Data(); 
+                    }
+                });
+
+                updateDepartmentDialog.setVisible(true);
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin khoa", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+             JOptionPane.showMessageDialog(this, "Lỗi định dạng ID khoa.", "Lỗi Dữ liệu", JOptionPane.ERROR_MESSAGE);
+             e.printStackTrace();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi tải dữ liệu: " + e.getMessage());
+            e.printStackTrace();
+        }                                 
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
