@@ -66,7 +66,7 @@ public class AddAppointment extends javax.swing.JDialog {
             List<Room> rooms = dao.getAllRooms();
             cbRooms1.removeAllItems();
             for (Room r : rooms) {
-                cbRooms1.addItem(r.getRoomId() + " - " + r.getRoomNumber());
+                cbRooms1.addItem(r.getRoomId() + " - " + r.getRoomNumber() + " - " + r.getDepartmentName());
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi load phòng: " + e.getMessage());
