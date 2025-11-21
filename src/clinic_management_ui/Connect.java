@@ -9,10 +9,10 @@ public class Connect {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             // Kết nối CSDL
-            String url = "jdbc:mysql://localhost:3306/clinic_management?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-
+           // String url = "jdbc:mysql://localhost:3306/clinic_management?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+           String url = "jdbc:mysql://localhost:3306/clinic_management"; 
             String user = "root";
-            String password = "13012005"; 
+            String password = "2408"; 
 
             Connection con = DriverManager.getConnection(url, user, password);
             return con;

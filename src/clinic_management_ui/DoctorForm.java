@@ -9,6 +9,7 @@ import clinic_management_dao.Doctor;
 import clinic_management_dao.DoctorDAO;
 import static java.lang.reflect.Array.set;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -34,14 +35,18 @@ public class DoctorForm extends javax.swing.JFrame {
     public void loadDoctorsToTable() {
         List<Doctor> doctorList = DoctorDAO.getAllDoctors();
         DefaultTableModel model = (DefaultTableModel) tblDoctors.getModel();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         model.setRowCount(0);
         for (Doctor doctor : doctorList) {
+            String formattedDate = doctor.getDateOfBirth() != null
+            ? doctor.getDateOfBirth().format(formatter)
+            : "";
             model.addRow(new Object[]{
                 doctor.getDoctorId(),
                 doctor.getFullName(),
                 doctor.getEmail(),
                 doctor.getGender(),
-                doctor.getDateOfBirth(),
+                formattedDate,
                 doctor.getPhoneNumber(),
                 doctor.getSpecialization(),});
         }
@@ -65,9 +70,7 @@ public class DoctorForm extends javax.swing.JFrame {
         btnUpdateDoctor = new javax.swing.JButton();
         btnDeleteDoctor = new javax.swing.JButton();
         btnSearchDoctor = new javax.swing.JButton();
-        SearchCriteria = new javax.swing.JComboBox<>();
         txtSearchDoctor = new javax.swing.JTextField();
-        LabelSearchCriteria = new javax.swing.JLabel();
         LabelSearchTerm = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -162,7 +165,7 @@ public class DoctorForm extends javax.swing.JFrame {
                             .addComponent(jButton10)
                             .addComponent(jButton11)
                             .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton10, jButton11, jButton5, jButton6, jButton7, jButton8});
@@ -192,7 +195,7 @@ public class DoctorForm extends javax.swing.JFrame {
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton10, jButton11, jButton5, jButton6, jButton7, jButton8});
 
         btnAddDoctor.setBackground(new java.awt.Color(255, 204, 204));
-        btnAddDoctor.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnAddDoctor.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         btnAddDoctor.setText("Add doctor");
         btnAddDoctor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,7 +204,7 @@ public class DoctorForm extends javax.swing.JFrame {
         });
 
         btnUpdateDoctor.setBackground(new java.awt.Color(255, 204, 204));
-        btnUpdateDoctor.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnUpdateDoctor.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         btnUpdateDoctor.setText("Update doctor");
         btnUpdateDoctor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,7 +213,7 @@ public class DoctorForm extends javax.swing.JFrame {
         });
 
         btnDeleteDoctor.setBackground(new java.awt.Color(255, 204, 204));
-        btnDeleteDoctor.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnDeleteDoctor.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         btnDeleteDoctor.setText("Delete doctor");
         btnDeleteDoctor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -219,7 +222,7 @@ public class DoctorForm extends javax.swing.JFrame {
         });
 
         btnSearchDoctor.setBackground(new java.awt.Color(255, 204, 204));
-        btnSearchDoctor.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnSearchDoctor.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnSearchDoctor.setText("Search ");
         btnSearchDoctor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,23 +230,17 @@ public class DoctorForm extends javax.swing.JFrame {
             }
         });
 
-        SearchCriteria.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        SearchCriteria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Doctor Name" }));
-        SearchCriteria.addActionListener(new java.awt.event.ActionListener() {
+        txtSearchDoctor.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtSearchDoctor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SearchCriteriaActionPerformed(evt);
+                txtSearchDoctorActionPerformed(evt);
             }
         });
 
-        txtSearchDoctor.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-        LabelSearchCriteria.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        LabelSearchCriteria.setText("Search Criteria:");
-
-        LabelSearchTerm.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        LabelSearchTerm.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         LabelSearchTerm.setText("Search Term:");
 
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel2.setText("DOCTOR");
 
         tblDoctors.setModel(new javax.swing.table.DefaultTableModel(
@@ -267,59 +264,46 @@ public class DoctorForm extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(23, 23, 23))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(81, 81, 81)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnAddDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(440, 440, 440))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(btnUpdateDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(90, 90, 90))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(LabelSearchCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(105, 105, 105)
-                                        .addComponent(LabelSearchTerm, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(39, 39, 39)))
-                                .addComponent(btnDeleteDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(SearchCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(81, 81, 81)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(LabelSearchTerm, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(83, 83, 83)))
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 164, Short.MAX_VALUE)
+                                .addComponent(btnAddDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(46, 46, 46)
+                                .addComponent(btnUpdateDoctor)
+                                .addGap(27, 27, 27)
+                                .addComponent(btnDeleteDoctor)))
+                        .addGap(43, 43, 43))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addGap(28, 28, 28)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSearchDoctor)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LabelSearchTerm)
-                    .addComponent(LabelSearchCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(SearchCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
+                    .addComponent(btnSearchDoctor))
+                .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDeleteDoctor)
                     .addComponent(btnUpdateDoctor)
                     .addComponent(btnAddDoctor))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -344,17 +328,22 @@ public class DoctorForm extends javax.swing.JFrame {
        
     private void populateDoctorTable(List<Doctor> doctorList) {
         DefaultTableModel model = (DefaultTableModel) tblDoctors.getModel();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
         model.setRowCount(0);
         for (Doctor doctor : doctorList) {
+            String formattedDate = doctor.getDateOfBirth() != null
+        ? doctor.getDateOfBirth().format(formatter)
+        : "";
             Object[] row = new Object[]{
                 doctor.getDoctorId(),
                 doctor.getFullName(),
                 doctor.getEmail(),
                 doctor.getGender(),
-                doctor.getDateOfBirth(),
+                formattedDate,
                 doctor.getPhoneNumber(),
-                doctor.getSpecialization(),
-                doctor.getDepartmentId(),};
+                doctor.getSpecialization()};
+              //  doctor.getDepartmentId(),};
             model.addRow(row);
         }
     }
@@ -466,13 +455,13 @@ public class DoctorForm extends javax.swing.JFrame {
 
     private void btnSearchDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDoctorActionPerformed
        String searchTerm = txtSearchDoctor.getText().trim();
-        String searchBy = (String) SearchCriteria.getSelectedItem();
+        
         DoctorDAO doctorDAO = new DoctorDAO();
         if (searchTerm.isEmpty()) {
             loadDoctorsToTable();
             return;
         }
-        List<Doctor> searchResult = doctorDAO.searchDoctor(searchTerm, searchBy);
+        List<Doctor> searchResult = doctorDAO.searchDoctor(searchTerm );
         populateDoctorTable(searchResult);
         if (searchResult.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy bác sĩ nào phù hợp với từ khóa.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -482,15 +471,15 @@ public class DoctorForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSearchDoctorActionPerformed
 
-    private void SearchCriteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchCriteriaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SearchCriteriaActionPerformed
-
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         PatientForm patientForm = new PatientForm();
         patientForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void txtSearchDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchDoctorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchDoctorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -505,9 +494,7 @@ public class DoctorForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel LabelSearchCriteria;
     private javax.swing.JLabel LabelSearchTerm;
-    private javax.swing.JComboBox<String> SearchCriteria;
     private javax.swing.JButton btnAddDoctor;
     private javax.swing.JButton btnDeleteDoctor;
     private javax.swing.JButton btnSearchDoctor;

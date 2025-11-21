@@ -62,8 +62,8 @@ public class AddDoctorDialog extends javax.swing.JDialog {
     private void populateFields() {
         if (doctorToUpdate != null) {
             txtFullName.setText(doctorToUpdate.getFullName());
-            txtBirthday.setText(doctorToUpdate.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            txtEmail.setText(doctorToUpdate.getEmail());
+            txtEmail.setText(doctorToUpdate.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            txtBirthday.setText(doctorToUpdate.getEmail());
             txtPhoneNumber.setText(doctorToUpdate.getPhoneNumber());
             txtSpecialization.setText(doctorToUpdate.getSpecialization());
             jComboBox1.setSelectedItem(doctorToUpdate.getGender() == Gender.MALE ? "Male" : "Female");
@@ -86,7 +86,7 @@ public class AddDoctorDialog extends javax.swing.JDialog {
         Email = new javax.swing.JLabel();
         LabelPhoneNumber = new javax.swing.JLabel();
         txtFullName = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
+        txtBirthday = new javax.swing.JTextField();
         txtPhoneNumber = new javax.swing.JTextField();
         btnAddDoctor = new javax.swing.JButton();
         addDoctor = new javax.swing.JLabel();
@@ -94,7 +94,7 @@ public class AddDoctorDialog extends javax.swing.JDialog {
         Department = new javax.swing.JLabel();
         Specialization = new javax.swing.JLabel();
         txtSpecialization = new javax.swing.JTextField();
-        txtBirthday = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         LabelGender = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
@@ -115,10 +115,10 @@ public class AddDoctorDialog extends javax.swing.JDialog {
 
         txtFullName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtEmail.addActionListener(new java.awt.event.ActionListener() {
+        txtBirthday.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtBirthday.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEmailActionPerformed(evt);
+                txtBirthdayActionPerformed(evt);
             }
         });
 
@@ -151,10 +151,10 @@ public class AddDoctorDialog extends javax.swing.JDialog {
 
         txtSpecialization.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        txtBirthday.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtBirthday.addActionListener(new java.awt.event.ActionListener() {
+        txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBirthdayActionPerformed(evt);
+                txtEmailActionPerformed(evt);
             }
         });
 
@@ -197,14 +197,14 @@ public class AddDoctorDialog extends javax.swing.JDialog {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(Birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(79, 79, 79)
-                                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtBirthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(Email, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(LabelGender, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(65, 65, 65)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtBirthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(71, 71, 71))
@@ -233,7 +233,7 @@ public class AddDoctorDialog extends javax.swing.JDialog {
                     .addComponent(FullName))
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBirthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -241,7 +241,7 @@ public class AddDoctorDialog extends javax.swing.JDialog {
                     .addComponent(LabelGender))
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBirthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Email))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -434,13 +434,13 @@ if (success) {
         this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailActionPerformed
-
     private void txtBirthdayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBirthdayActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBirthdayActionPerformed
+
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEmailActionPerformed
 
     /**
      * @param args the command line arguments
