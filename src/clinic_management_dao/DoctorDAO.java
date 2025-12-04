@@ -141,64 +141,83 @@ public class DoctorDAO {
 
 
 
-public Doctor getDoctorById(int doctorId) throws SQLException
-{
-    String sql = "SELECT * FROM doctors WHERE doctor_id = ?";
-    try(Connection conn = Connect.ConnectDB();  PreparedStatement ps = conn.prepareStatement(sql))
+    public Doctor getDoctorById(int doctorId) throws SQLException
     {
-        ps.setInt(1, doctorId);
-        try(ResultSet rs = ps.executeQuery())
+        String sql = "SELECT * FROM doctors WHERE doctor_id = ?";
+        try(Connection conn = Connect.ConnectDB();  PreparedStatement ps = conn.prepareStatement(sql))
         {
-            if(rs.next())
+            ps.setInt(1, doctorId);
+            try(ResultSet rs = ps.executeQuery())
             {
-                Doctor doctor = new Doctor();
-                doctor.setDoctorId(rs.getInt("doctor_id"));
-                doctor.setFullName(rs.getString("full_name"));
-                doctor.setEmail(rs.getString("email"));
-                doctor.setSpecialization(rs.getString("specialization"));
-                doctor.setDepartmentId(rs.getInt("department_id"));
-                doctor.setPhoneNumber(rs.getString("phone_number"));
-                if (rs.getString("gender") != null) {
-                    doctor.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
-                }
-                java.sql.Date dobSql = rs.getDate("date_of_birth");
-                if(dobSql != null)
+                if(rs.next())
                 {
-                    doctor.setDateOfBirth(dobSql.toLocalDate());
+                    Doctor doctor = new Doctor();
+                    doctor.setDoctorId(rs.getInt("doctor_id"));
+                    doctor.setFullName(rs.getString("full_name"));
+                    doctor.setEmail(rs.getString("email"));
+                    doctor.setSpecialization(rs.getString("specialization"));
+                    doctor.setDepartmentId(rs.getInt("department_id"));
+                    doctor.setPhoneNumber(rs.getString("phone_number"));
+                    if (rs.getString("gender") != null) {
+                        doctor.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
+                    }
+                    java.sql.Date dobSql = rs.getDate("date_of_birth");
+                    if(dobSql != null)
+                    {
+                        doctor.setDateOfBirth(dobSql.toLocalDate());
+                    }
+                    return doctor;
                 }
-                return doctor;
             }
+
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;  
+    }
+    public boolean updateDoctor(Doctor doctor) throws SQLException
+    {
+        String sql = "UPDATE doctors SET full_name =?, date_of_birth=?, gender=?, email = ?, phone_number = ?, department_id = ?, specialization = ? WHERE doctor_id = ?";
+        try(Connection conn = Connect.ConnectDB();  PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setString(1, doctor.getFullName());
+            ps.setDate(2, java.sql.Date.valueOf(doctor.getDateOfBirth()));
+            ps.setString(3, doctor.getGender().name());
+            ps.setString(4, doctor.getEmail());
+            ps.setString(5, doctor.getPhoneNumber());
+            ps.setInt(6, doctor.getDepartmentId());
+            ps.setString(7, doctor.getSpecialization());
+            ps.setInt(8, doctor.getDoctorId()); 
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public String getDepartmentNameById(int departmentId) {
+        String sql = "SELECT department_name FROM departments WHERE department_id = ?";
+
+        try (Connection conn = Connect.ConnectDB();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, departmentId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("department_name");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
+        return null; // Không tìm thấy hoặc lỗi
     }
-    catch(SQLException e)
-    {
-        e.printStackTrace();
-    }
-    return null;  
-}
-public boolean updateDoctor(Doctor doctor) throws SQLException
-{
-    String sql = "UPDATE doctors SET full_name =?, date_of_birth=?, gender=?, email = ?, phone_number = ?, department_id = ?, specialization = ? WHERE doctor_id = ?";
-    try(Connection conn = Connect.ConnectDB();  PreparedStatement ps = conn.prepareStatement(sql))
-    {
-        ps.setString(1, doctor.getFullName());
-        ps.setDate(2, java.sql.Date.valueOf(doctor.getDateOfBirth()));
-        ps.setString(3, doctor.getGender().name());
-        ps.setString(4, doctor.getEmail());
-        ps.setString(5, doctor.getPhoneNumber());
-        ps.setInt(6, doctor.getDepartmentId());
-        ps.setString(7, doctor.getSpecialization());
-        ps.setInt(8, doctor.getDoctorId()); 
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected > 0;
-
-    }
-    catch(SQLException e)
-    {
-        e.printStackTrace();
-        return false;
-    }
-}
-
 }
